@@ -1,2 +1,2 @@
-https://discord.gg/QbMjDKdErd
-ho
+- https://discord.gg/QbMjDKdErd
+hoi
