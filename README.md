@@ -1,1 +1,2 @@
-hi
+https://discord.gg/QbMjDKdErd
+ho
