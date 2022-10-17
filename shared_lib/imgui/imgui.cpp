@@ -27,7 +27,7 @@
 // Note that 'ImGui::' being a namespace, you can add functions into the namespace from your own source files, without
 // modifying imgui.h or imgui.cpp. You may include imgui_internal.h to access internal data structures, but it doesn't
 // come with any guarantee of forward compatibility. Discussing your changes on the GitHub Issue Tracker may lead you
-// to a better solution or official support for them.
+// to a better solution or official support for them.R
 
 /*
 

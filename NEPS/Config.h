@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include "SDK/Vector.h"
 
 #include <shared_lib/imgui/imgui.h>
 #include "Hacks/SkinChanger.h"
@@ -13,28 +14,28 @@
 class Config
 {
 public:
-	explicit Config(const char *) noexcept;
+	explicit Config(const char*) noexcept;
 
-	bool load(const char8_t *name, bool incremental) noexcept;
+	bool load(const char8_t* name, bool incremental) noexcept;
 	bool load(std::size_t, bool incremental) noexcept;
 	void save(std::size_t) const noexcept;
-	void add(const char *) noexcept;
+	void add(const char*) noexcept;
 	void remove(std::size_t) noexcept;
-	void rename(std::size_t, const char *) noexcept;
+	void rename(std::size_t, const char*) noexcept;
 	void reset() noexcept;
 	void listConfigs() noexcept;
 	void openConfigDir() const noexcept;
 
-	constexpr auto &getConfigs() noexcept { return configs; }
+	constexpr auto& getConfigs() noexcept { return configs; }
 
 	struct Font
 	{
-		ImFont *font;
+		ImFont* font;
 	};
 
 	struct Aimbot
 	{
-		static Aimbot &getRelevantConfig() noexcept;
+		static Aimbot& getRelevantConfig() noexcept;
 
 		KeyBind bind;
 		bool aimlock = false;
@@ -77,10 +78,9 @@ public:
 	};
 	std::array<Aimbot, 40> aimbot;
 
-
 	struct Triggerbot
 	{
-		static Triggerbot &getRelevantConfig() noexcept;
+		static Triggerbot& getRelevantConfig() noexcept;
 
 		KeyBind bind;
 		bool friendlyFire = false;
@@ -107,7 +107,7 @@ public:
 
 	struct AntiAim
 	{
-		static AntiAim &getRelevantConfig() noexcept;
+		static AntiAim& getRelevantConfig() noexcept;
 
 		bool pitch = false;
 		float pitchAngle = 0.0f;
@@ -118,11 +118,11 @@ public:
 		int rightKey = 0;
 		int backKey = 0;
 		int leftKey = 0;
-		Color4OutlineToggle visualizeDirection = {1.0f, 1.0f, 1.0f, 0.5f};
+		Color4OutlineToggle visualizeDirection = { 1.0f, 1.0f, 1.0f, 0.5f };
 		int desync = 0;
 		bool fakeUp = false;
 		int flipKey = 0;
-		Color4OutlineToggle visualizeSide = {1.0f, 1.0f, 1.0f, 0.5f};
+		Color4OutlineToggle visualizeSide = { 1.0f, 1.0f, 1.0f, 0.5f };
 		KeyBind choke;
 		int chokedPackets = 0;
 	};
@@ -215,7 +215,7 @@ public:
 		Color4 overlayCrosshair;
 		int overlayCrosshairType = 0;
 		Color4 recoilCrosshair;
-		Color4OutlineToggle accuracyCircle = {1.0f, 1.0f, 1.0f, 0.25f};
+		Color4OutlineToggle accuracyCircle = { 1.0f, 1.0f, 1.0f, 0.25f };
 		int recoilCrosshairType = 0;
 		int forceCrosshair = 0;
 
@@ -230,7 +230,7 @@ public:
 
 			bool enabled = false;
 			int sprite = 0;
-			std::array<float, 4> color = {1.0f, 1.0f, 1.0f, 1.0f};
+			std::array<float, 4> color = { 1.0f, 1.0f, 1.0f, 1.0f };
 			float width = 1.0f;
 			float life = 3.0f;
 			int type = 0;
@@ -245,7 +245,7 @@ public:
 		struct Dlights
 		{
 			bool enabled = false;
-			std::array<float, 4> color = {1.0f, 1.0f, 1.0f, 1.0f};
+			std::array<float, 4> color = { 1.0f, 1.0f, 1.0f, 1.0f };
 			float radius = 100.0f;
 		};
 
@@ -253,8 +253,8 @@ public:
 		Dlights allyDlights;
 		Dlights enemyDlights;
 
-		Color4ToggleThickness molotovHull = {1.0f, 0.5f, 0.0f, 0.3f};
-		Color4ToggleThickness smokeHull = {0.5f, 0.5f, 0.5f, 0.3f};
+		Color4ToggleThickness molotovHull = { 1.0f, 0.5f, 0.0f, 0.3f };
+		Color4ToggleThickness smokeHull = { 0.5f, 0.5f, 0.5f, 0.3f };
 		Color4ToggleThickness playerBounds;
 		Color4OutlineToggleThickness playerVelocity;
 
@@ -308,9 +308,19 @@ public:
 		std::string customDeathSound;
 	} sound;
 
+	struct Players 
+{
+		bool enabled = false;
+		bool filterAim = false;
+		bool filterESP = false;
+		bool filterChams = false;
+		bool filterGlow = false;
+		bool spectatorFilter = false;
+	} players;
+
 	struct Style
 	{
-		int menuStyle = 0;
+		int menuStyle = 1;
 		int menuColors = 1;
 		float scaling = 1.0f;
 	} style;
@@ -337,8 +347,6 @@ public:
 		bool clocktag = false;
 		bool customClanTag = false;
 		std::string killMessageString;
-		int banColor = 6;
-		std::string banText = "Cheater has been permanently banned from official CS:GO servers.";
 		bool spamUse = false;
 		KeyBind chatNuke;
 		KeyBind chatBasmala;
@@ -348,7 +356,7 @@ public:
 			KeyBind bind;
 			float trajectoryFac = 1.0f;
 			float distanceFac = 2.0f;
-			Color4ToggleThickness visualize = {0.0f, 1.0f, 0.0f, 0.7f};
+			Color4ToggleThickness visualize = { 0.0f, 1.0f, 0.0f, 0.7f };
 		} blockbot;
 
 		struct Reportbot
@@ -370,20 +378,21 @@ public:
 		bool bunnyHop = false;
 		bool autoStrafe = false;
 		KeyBind edgeJump;
+		KeyBind jumpBug;
 		bool fastStop = false;
 
 		struct QuickPeek
 		{
 			KeyBind bind;
-			Color4Toggle visualizeIdle = {0.0f, 1.0f, 0.0f, 0.5f};
-			Color4Toggle visualizeActive = {1.0f, 1.0f, 0.0f, 0.5f};
+			Color4Toggle visualizeIdle = { 0.0f, 1.0f, 0.0f, 0.5f };
+			Color4Toggle visualizeActive = { 1.0f, 1.0f, 0.0f, 0.5f };
 		} autoPeek;
 
 	} movement;
 
 	struct Misc
 	{
-		int menuKey = 0x2E; // VK_DELETE
+		int menuKey = 0x73; // VK_F4
 		bool autoPistol = false;
 		bool autoReload = false;
 		bool autoAccept = false;
@@ -394,7 +403,7 @@ public:
 		bool disableModelOcclusion = true;
 		bool noExtrapolate = true;
 		bool disableIK = false;
-		bool resolveLby = false;
+		bool resolveEnemyAnimations = false;
 		bool unlockInventory = false;
 		bool disablePanoramablur = false;
 
@@ -462,17 +471,16 @@ public:
 		bool fixTabletSignal = false;
 		bool nadePredict = false;
 		int forceRelayCluster = 0;
-		bool goFestive = false;
 	} misc;
 
-	void scheduleFontLoad(const std::string &name) noexcept;
+	void scheduleFontLoad(const std::string& name) noexcept;
 	bool loadScheduledFonts() noexcept;
-	const auto &getSystemFonts() const noexcept { return systemFonts; }
-	const auto &getFonts() const noexcept { return fonts; }
-	const auto &getPath() const noexcept { return path; }
+	const auto& getSystemFonts() const noexcept { return systemFonts; }
+	const auto& getFonts() const noexcept { return fonts; }
+	const auto& getPath() const noexcept { return path; }
 private:
-	std::vector<std::string> scheduledFonts = {"Default"};
-	std::vector<std::string> systemFonts = {"Default"};
+	std::vector<std::string> scheduledFonts = { "Default" };
+	std::vector<std::string> systemFonts = { "Default" };
 	std::unordered_map<std::string, Font> fonts;
 	std::filesystem::path path;
 	std::vector<std::string> configs;

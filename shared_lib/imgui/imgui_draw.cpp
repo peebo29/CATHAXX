@@ -1,4 +1,4 @@
-// dear imgui, v1.82
+﻿// dear imgui, v1.82
 // (drawing and font code)
 
 /*
@@ -158,7 +158,7 @@ namespace IMGUI_STB_NAMESPACE
 #include "imstb_truetype.h"
 #endif
 #endif
-#endif // IMGUI_ENABLE_STB_TRUETYPE
+#endif IMGUI_ENABLE_STB_TRUETYPE
 
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
@@ -173,7 +173,7 @@ namespace IMGUI_STB_NAMESPACE
 #endif
 
 #ifdef IMGUI_STB_NAMESPACE
-} // namespace ImStb
+} namespace ImStb
 using namespace IMGUI_STB_NAMESPACE;
 #endif
 
@@ -539,7 +539,7 @@ void ImDrawList::_OnChangedVtxOffset()
     // We don't need to compare curr_cmd->VtxOffset != _CmdHeader.VtxOffset because we know it'll be different at the time we call this.
     _VtxCurrentIdx = 0;
     ImDrawCmd* curr_cmd = &CmdBuffer.Data[CmdBuffer.Size - 1];
-    //IM_ASSERT(curr_cmd->VtxOffset != _CmdHeader.VtxOffset); // See #3349
+    IM_ASSERT(curr_cmd->VtxOffset != _CmdHeader.VtxOffset); // See #3349
     if (curr_cmd->ElemCount != 0)
     {
         AddDrawCmd();
@@ -817,14 +817,14 @@ void ImDrawList::AddPolyline(const ImVec2* points, const int points_count, ImU32
             {
                 // If we're using textures we only need to emit the left/right edge vertices
                 ImVec4 tex_uvs = _Data->TexUvLines[integer_thickness];
-                /*if (fractional_thickness != 0.0f) // Currently always zero when use_texture==false!
+                if (fractional_thickness != 0.0f) // Currently always zero when use_texture==false!
                 {
                     const ImVec4 tex_uvs_1 = _Data->TexUvLines[integer_thickness + 1];
                     tex_uvs.x = tex_uvs.x + (tex_uvs_1.x - tex_uvs.x) * fractional_thickness; // inlined ImLerp()
                     tex_uvs.y = tex_uvs.y + (tex_uvs_1.y - tex_uvs.y) * fractional_thickness;
                     tex_uvs.z = tex_uvs.z + (tex_uvs_1.z - tex_uvs.z) * fractional_thickness;
                     tex_uvs.w = tex_uvs.w + (tex_uvs_1.w - tex_uvs.w) * fractional_thickness;
-                }*/
+                }
                 ImVec2 tex_uv0(tex_uvs.x, tex_uvs.y);
                 ImVec2 tex_uv1(tex_uvs.z, tex_uvs.w);
                 for (int i = 0; i < points_count; i++)
@@ -1380,7 +1380,7 @@ void ImDrawList::AddRectFilled(const ImVec2& p_min, const ImVec2& p_max, ImU32 c
     }
 }
 
-// p_min = upper-left, p_max = lower-right
+//p_min = upper-left, p_max = lower-right
 void ImDrawList::AddRectFilledMultiColor(const ImVec2& p_min, const ImVec2& p_max, ImU32 col_upr_left, ImU32 col_upr_right, ImU32 col_bot_right, ImU32 col_bot_left)
 {
     if (((col_upr_left | col_upr_right | col_bot_right | col_bot_left) & IM_COL32_A_MASK) == 0)
@@ -2241,7 +2241,7 @@ bool    ImFontAtlas::Build()
 #elif defined(IMGUI_ENABLE_STB_TRUETYPE)
         builder_io = ImFontAtlasGetBuilderForStbTruetype();
 #else
-        IM_ASSERT(0); // Invalid Build function
+        IM_ASSERT(0); Invalid Build function
 #endif
     }
 
@@ -2564,7 +2564,7 @@ const ImFontBuilderIO* ImFontAtlasGetBuilderForStbTruetype()
     return &io;
 }
 
-#endif // IMGUI_ENABLE_STB_TRUETYPE
+#endif IMGUI_ENABLE_STB_TRUETYPE
 
 void ImFontAtlasBuildSetupFont(ImFontAtlas* atlas, ImFont* font, ImFontConfig* font_config, float ascent, float descent)
 {
@@ -3743,6 +3743,7 @@ void ImGui::RenderCheckMark(ImDrawList* draw_list, ImVec2 pos, ImU32 col, float 
     draw_list->PathLineTo(ImVec2(bx + third * 2.0f, by - third * 2.0f));
     draw_list->PathStroke(col, 0, thickness);
 }
+
 
 void ImGui::RenderMouseCursor(ImDrawList* draw_list, ImVec2 pos, float scale, ImGuiMouseCursor mouse_cursor, ImU32 col_fill, ImU32 col_border, ImU32 col_shadow)
 {

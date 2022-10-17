@@ -14,12 +14,11 @@ public:
 	GUI() noexcept;
 	void render() noexcept;
 	bool open = false;
-	const auto &getFont() noexcept { return font; };
+	const auto& getFont() noexcept { return font; };
 	void updateColors() const noexcept;
 private:
 	void renderGuiStyle2() noexcept;
 	void renderContextMenu() noexcept;
-	void renderMenuBar() noexcept;
 	void renderDebugWindow() noexcept;
 	void renderAimbotWindow(bool contentOnly = false) noexcept;
 	void renderAntiAimWindow(bool contentOnly = false) noexcept;
@@ -31,6 +30,7 @@ private:
 	void renderVisualsWindow(bool contentOnly = false) noexcept;
 	void renderSkinChangerWindow(bool contentOnly = false) noexcept;
 	void renderSoundWindow(bool contentOnly = false) noexcept;
+	void renderPlayersWindow(bool contentOnly = false) noexcept;
 	void renderExploitsWindow(bool contentOnly = false) noexcept;
 	void renderGriefingWindow(bool contentOnly = false) noexcept;
 	void renderMovementWindow(bool contentOnly = false) noexcept;
@@ -50,6 +50,7 @@ private:
 		bool visuals = false;
 		bool skinChanger = false;
 		bool sound = false;
+		bool players = false;
 		bool griefing = false;
 		bool exploits = false;
 		bool movement = false;
@@ -58,7 +59,7 @@ private:
 		bool config = false;
 	} window;
 
-	ImFont *font = nullptr;
+	ImFont* font = nullptr;
 };
 
 inline std::unique_ptr<GUI> gui;

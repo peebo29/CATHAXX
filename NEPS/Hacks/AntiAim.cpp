@@ -13,7 +13,7 @@
 #include "../SDK/UserCmd.h"
 #include "../SDK/GlobalVars.h"
 
-static bool canAntiAim(UserCmd *cmd) noexcept
+static bool canAntiAim(UserCmd* cmd) noexcept
 {
 	if (!localPlayer)
 		return false;
@@ -30,7 +30,7 @@ static bool canAntiAim(UserCmd *cmd) noexcept
 	return true;
 }
 
-static void microMovement(UserCmd *cmd) noexcept
+static void microMovement(UserCmd* cmd) noexcept
 {
 	if (std::fabsf(cmd->sidemove) < 5.0f)
 	{
@@ -52,7 +52,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& currentViewAngles, bool& sendPacke
 	if (!networkChannel)
 		return;
 
-	const auto &cfg = Config::AntiAim::getRelevantConfig();
+	const auto& cfg = Config::AntiAim::getRelevantConfig();
 	const auto time = memory->globalVars->serverTime();
 
 	bool fakeDucking = false;
@@ -71,7 +71,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& currentViewAngles, bool& sendPacke
 
 		fakeDucking = true;
 	}
-	
+
 	if (Helpers::attacking(cmd->buttons & UserCmd::Button_Attack, cmd->buttons & UserCmd::Button_Attack2))
 		return;
 
@@ -88,7 +88,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& currentViewAngles, bool& sendPacke
 
 	if (cfg.lookAtEnemies && cmd->viewangles.y == currentViewAngles.y)
 	{
-		Entity *bestTarget = nullptr;
+		Entity* bestTarget = nullptr;
 		auto bestFov = 255.0f;
 		auto bestAngle = 0.0f;
 
@@ -123,8 +123,8 @@ void AntiAim::run(UserCmd* cmd, const Vector& currentViewAngles, bool& sendPacke
 		break;
 	case 1:
 	{
-		constexpr std::array positions = {-35.0f, 0.0f, 35.0f};
-		std::array active = {false, false, false};
+		constexpr std::array positions = { -35.0f, 0.0f, 35.0f };
+		std::array active = { false, false, false };
 		const auto fwd = Vector::fromAngle2D(cmd->viewangles.y);
 		const auto side = fwd.crossProduct(Vector::up());
 
@@ -134,7 +134,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& currentViewAngles, bool& sendPacke
 			const auto end = start + fwd * 100.0f;
 
 			Trace trace;
-			interfaces->engineTrace->traceRay({start, end}, CONTENTS_SOLID | CONTENTS_WINDOW, nullptr, trace);
+			interfaces->engineTrace->traceRay({ start, end }, CONTENTS_SOLID | CONTENTS_WINDOW, nullptr, trace);
 
 			if (trace.fraction != 1.0f)
 				active[i] = true;
@@ -147,7 +147,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& currentViewAngles, bool& sendPacke
 		else
 			dir = 0;
 	}
-		break;
+	break;
 	case 2:
 	{
 		if (cfg.rightKey && GetAsyncKeyState(cfg.rightKey))
@@ -159,7 +159,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& currentViewAngles, bool& sendPacke
 		if (cfg.leftKey && GetAsyncKeyState(cfg.leftKey))
 			dir = 1;
 	}
-		break;
+	break;
 	}
 
 	cmd->viewangles.y += 90.0f * dir;
@@ -205,7 +205,8 @@ void AntiAim::run(UserCmd* cmd, const Vector& currentViewAngles, bool& sendPacke
 		{
 			sendPacket = false;
 			cmd->viewangles.y += a;
-		} else if (!sendPacket)
+		}
+		else if (!sendPacket)
 			cmd->viewangles.y += b;
 	}
 
@@ -213,12 +214,12 @@ void AntiAim::run(UserCmd* cmd, const Vector& currentViewAngles, bool& sendPacke
 		cmd->viewangles.y += cfg.yawAngle;
 }
 
-bool AntiAim::fakePitch(UserCmd *cmd) noexcept
+bool AntiAim::fakePitch(UserCmd* cmd) noexcept
 {
 	if (!canAntiAim(cmd))
 		return false;
 
-	const auto &cfg = Config::AntiAim::getRelevantConfig();
+	const auto& cfg = Config::AntiAim::getRelevantConfig();
 
 	if (cfg.fakeUp && !Helpers::attacking(cmd->buttons & UserCmd::Button_Attack, cmd->buttons & UserCmd::Button_Attack2))
 	{
@@ -230,7 +231,7 @@ bool AntiAim::fakePitch(UserCmd *cmd) noexcept
 	return false;
 }
 
-void AntiAim::visualize(ImDrawList *drawList) noexcept
+void AntiAim::visualize(ImDrawList* drawList) noexcept
 {
 	if (!localPlayer)
 		return;
@@ -241,7 +242,7 @@ void AntiAim::visualize(ImDrawList *drawList) noexcept
 	if (localPlayer->moveType() == MoveType::Noclip || localPlayer->moveType() == MoveType::Ladder)
 		return;
 
-	const auto &cfg = Config::AntiAim::getRelevantConfig();
+	const auto& cfg = Config::AntiAim::getRelevantConfig();
 
 	if (cfg.visualizeDirection.enabled && cfg.direction)
 	{
@@ -249,13 +250,13 @@ void AntiAim::visualize(ImDrawList *drawList) noexcept
 		switch (dir)
 		{
 		case -1:
-			ImGuiCustom::drawTriangleFromCenter(drawList, {-200, 0}, color, cfg.visualizeDirection.outline);
+			ImGuiCustom::drawTriangleFromCenter(drawList, { -200, 0 }, color, cfg.visualizeDirection.outline);
 			break;
 		case 0:
-			ImGuiCustom::drawTriangleFromCenter(drawList, {0, 100}, color, cfg.visualizeDirection.outline);
+			ImGuiCustom::drawTriangleFromCenter(drawList, { 0, 100 }, color, cfg.visualizeDirection.outline);
 			break;
 		case 1:
-			ImGuiCustom::drawTriangleFromCenter(drawList, {200, 0}, color, cfg.visualizeDirection.outline);
+			ImGuiCustom::drawTriangleFromCenter(drawList, { 200, 0 }, color, cfg.visualizeDirection.outline);
 			break;
 		}
 	}
@@ -264,8 +265,8 @@ void AntiAim::visualize(ImDrawList *drawList) noexcept
 	{
 		const auto color = Helpers::calculateColor(cfg.visualizeSide);
 		if (flip)
-			ImGuiCustom::drawTriangleFromCenter(drawList, {100, 0}, color, cfg.visualizeSide.outline);
+			ImGuiCustom::drawTriangleFromCenter(drawList, { 100, 0 }, color, cfg.visualizeSide.outline);
 		else
-			ImGuiCustom::drawTriangleFromCenter(drawList, {-100, 0}, color, cfg.visualizeSide.outline);
+			ImGuiCustom::drawTriangleFromCenter(drawList, { -100, 0 }, color, cfg.visualizeSide.outline);
 	}
 }

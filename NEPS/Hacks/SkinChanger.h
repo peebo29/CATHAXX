@@ -103,7 +103,7 @@ namespace SkinChanger
         {WeaponId::Ump45, "UMP-45"},
         {WeaponId::Usp_s, "USP-S"},
         {WeaponId::Xm1014, "XM1014"}
-    });
+        });
 }
 
 
@@ -174,7 +174,8 @@ struct item_setting {
         if (itemId == WeaponId::GloveT) {
             paintKit = SkinChanger::getGloveKits()[paint_kit_vector_index].id;
             definition_override_index = (int)SkinChanger::getGloveTypes()[definition_override_vector_index].id;
-        } else {
+        }
+        else {
             paintKit = SkinChanger::getSkinKits()[paint_kit_vector_index].id;
             definition_override_index = (int)SkinChanger::getKnifeTypes()[definition_override_vector_index].id;
         }
@@ -187,7 +188,7 @@ struct item_setting {
     {
         {
             const auto it = std::find_if(std::begin(SkinChanger::weapon_names), std::end(SkinChanger::weapon_names), [this](const auto& k) { return k.definition_index == itemId; });
-			itemIdIndex = it != std::end(SkinChanger::weapon_names) ? std::distance(std::begin(SkinChanger::weapon_names), it) : 0;
+            itemIdIndex = it != std::end(SkinChanger::weapon_names) ? std::distance(std::begin(SkinChanger::weapon_names), it) : 0;
         }
 
         {
@@ -206,7 +207,8 @@ struct item_setting {
                 const auto it = std::find_if(SkinChanger::getGloveTypes().begin(), SkinChanger::getGloveTypes().end(), [this](const auto& k) { return (int)k.id == definition_override_index; });
                 definition_override_vector_index = it != SkinChanger::getGloveTypes().end() ? std::distance(SkinChanger::getGloveTypes().begin(), it) : 0;
             }
-        } else {
+        }
+        else {
             {
                 const auto it = std::find_if(SkinChanger::getSkinKits().begin(), SkinChanger::getSkinKits().end(), [this](const auto& k) { return k.id == paintKit; });
                 paint_kit_vector_index = it != SkinChanger::getSkinKits().end() ? std::distance(SkinChanger::getSkinKits().begin(), it) : 0;
@@ -224,7 +226,7 @@ struct item_setting {
 
     bool enabled = false;
     int itemIdIndex = 0;
-	WeaponId itemId = WeaponId{};
+    WeaponId itemId = WeaponId{};
     int entity_quality_vector_index = 0;
     int quality = 0;
     int paint_kit_vector_index = 0;

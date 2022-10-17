@@ -1,4 +1,5 @@
 #pragma once
+#include "../SDK/Prediction.h"
 
 struct UserCmd;
 

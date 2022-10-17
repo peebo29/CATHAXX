@@ -52,9 +52,9 @@ END
 //
 
 #ifdef NEPS_DEBUG
-IDR_BIN1                BIN                     "..\\Debug\\NEPS\\MeowEngine.dll"
+IDR_BIN1                BIN                     "..\\Debug\\NEPS\\MEOWENGINE.dll"
 #else
-IDR_BIN1                BIN                     "..\\Release\\NEPS\\MeowEngine.dll"
+IDR_BIN1                BIN                     "..\\Release\\NEPS\\MEOWENGINE.dll"
 #endif // NEPS_DEBUG
 
 

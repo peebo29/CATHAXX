@@ -30,7 +30,7 @@ static SessionData sessionData;
 
 static auto playerByHandleWritable(int handle) noexcept
 {
-	const auto it = std::find_if(playerData.begin(), playerData.end(), [handle](const auto &playerData) { return playerData.handle == handle; });
+	const auto it = std::find_if(playerData.begin(), playerData.end(), [handle](const auto& playerData) { return playerData.handle == handle; });
 	return it != playerData.end() ? &(*it) : nullptr;
 }
 
@@ -86,7 +86,8 @@ void GameData::update() noexcept
 			if (const auto player = playerByHandleWritable(entity->handle()))
 			{
 				player->update(entity);
-			} else
+			}
+			else
 			{
 				PlayerData dummy;
 				dummy.update(entity);
@@ -99,7 +100,8 @@ void GameData::update() noexcept
 				if (obs)
 					observerData.emplace_back(entity, obs, obs == localPlayer.get(), obs == obsTarget);
 			}
-		} else
+		}
+		else
 		{
 			if (entity->isDormant())
 				continue;
@@ -108,7 +110,8 @@ void GameData::update() noexcept
 			{
 				if (entity->ownerEntity() == -1)
 					weaponData.emplace_back(entity);
-			} else
+			}
+			else
 			{
 				auto classId = entity->getClientClass()->classId;
 
@@ -166,7 +169,7 @@ void GameData::update() noexcept
 	activeSounds.destructAll();
 	interfaces->engineSound->getActiveSounds(activeSounds);
 
-	for (auto &sound : activeSounds)
+	for (auto& sound : activeSounds)
 	{
 		if (sound.soundSource < 1 || sound.soundSource > 64)
 			continue;
@@ -188,7 +191,7 @@ void GameData::update() noexcept
 					player->origin = *sound.origin;
 					player->headMaxs += delta;
 					player->headMins += delta;
-					for (auto &bone : player->bones)
+					for (auto& bone : player->bones)
 					{
 						bone.first += delta;
 						bone.second += delta;
@@ -203,19 +206,19 @@ void GameData::update() noexcept
 	std::sort(entityData.begin(), entityData.end());
 	std::sort(lootCrateData.begin(), lootCrateData.end());
 
-	std::for_each(projectileData.begin(), projectileData.end(), [](auto &projectile)
-	{
-		if (interfaces->entityList->getEntityFromHandle(projectile.handle) == nullptr)
-			projectile.exploded = true;
-	});
+	std::for_each(projectileData.begin(), projectileData.end(), [](auto& projectile)
+		{
+			if (interfaces->entityList->getEntityFromHandle(projectile.handle) == nullptr)
+				projectile.exploded = true;
+		});
 
-	std::erase_if(projectileData, [](const auto &projectile)
-	{
-		return interfaces->entityList->getEntityFromHandle(projectile.handle) == nullptr
-			&& (projectile.trajectory.size() < 1 || projectile.trajectory[projectile.trajectory.size() - 1].first + 60.0f < memory->globalVars->realTime);
-	});
+	std::erase_if(projectileData, [](const auto& projectile)
+		{
+			return interfaces->entityList->getEntityFromHandle(projectile.handle) == nullptr
+				&& (projectile.trajectory.size() < 1 || projectile.trajectory[projectile.trajectory.size() - 1].first + 60.0f < memory->globalVars->realTime);
+		});
 
-	std::erase_if(playerData, [](const auto &player) { return interfaces->entityList->getEntityFromHandle(player.handle) == nullptr; });
+	std::erase_if(playerData, [](const auto& player) { return interfaces->entityList->getEntityFromHandle(player.handle) == nullptr; });
 }
 
 void GameData::clearProjectileList() noexcept
@@ -224,62 +227,62 @@ void GameData::clearProjectileList() noexcept
 	projectileData.clear();
 }
 
-const Matrix4x4 &GameData::toScreenMatrix() noexcept
+const Matrix4x4& GameData::toScreenMatrix() noexcept
 {
 	return viewMatrix;
 }
 
-const LocalPlayerData &GameData::local() noexcept
+const LocalPlayerData& GameData::local() noexcept
 {
 	return localPlayerData;
 }
 
-const std::vector<PlayerData> &GameData::players() noexcept
+const std::vector<PlayerData>& GameData::players() noexcept
 {
 	return playerData;
 }
 
-const std::vector<ObserverData> &GameData::observers() noexcept
+const std::vector<ObserverData>& GameData::observers() noexcept
 {
 	return observerData;
 }
 
-const std::vector<WeaponData> &GameData::weapons() noexcept
+const std::vector<WeaponData>& GameData::weapons() noexcept
 {
 	return weaponData;
 }
 
-const std::vector<EntityData> &GameData::entities() noexcept
+const std::vector<EntityData>& GameData::entities() noexcept
 {
 	return entityData;
 }
 
-const std::vector<LootCrateData> &GameData::lootCrates() noexcept
+const std::vector<LootCrateData>& GameData::lootCrates() noexcept
 {
 	return lootCrateData;
 }
 
-const std::list<ProjectileData> &GameData::projectiles() noexcept
+const std::list<ProjectileData>& GameData::projectiles() noexcept
 {
 	return projectileData;
 }
 
-const BombData &GameData::plantedC4() noexcept
+const BombData& GameData::plantedC4() noexcept
 {
 	return bombData;
 }
 
-const std::vector<InfernoData> &GameData::infernos() noexcept
+const std::vector<InfernoData>& GameData::infernos() noexcept
 {
 	return infernoData;
 }
 
-const std::vector<SmokeData> &GameData::smokes() noexcept
+const std::vector<SmokeData>& GameData::smokes() noexcept
 {
 	return smokeData;
 }
 
-const SessionData &GameData::session() noexcept
+const SessionData& GameData::session() noexcept
 {
 	return sessionData;
 }
@@ -329,14 +332,15 @@ void LocalPlayerData::update() noexcept
 
 		if (const auto activeWeapon = obs->getActiveWeapon(); activeWeapon && obs->isAlive())
 		{
-			inaccuracy = eyePosition + Vector::fromAngle(interfaces->engine->getViewAngles() + Vector{Helpers::radiansToDegrees(activeWeapon->getInaccuracy() + activeWeapon->getSpread()), 0.0f, 0.0f}) * 1000;
+			inaccuracy = eyePosition + Vector::fromAngle(interfaces->engine->getViewAngles() + Vector{ Helpers::radiansToDegrees(activeWeapon->getInaccuracy() + activeWeapon->getSpread()), 0.0f, 0.0f }) * 1000;
 			shooting = obs->shotsFired() > 1;
 			reloading = activeWeapon->isInReload();
 			nextAttack = std::fmaxf(activeWeapon->nextPrimaryAttack(), obs->nextAttack());
 			drawingScope = (activeWeapon->isSniperRifle() || !config->visuals.noWeapons) && obs->isScoped();
 			drawingCrosshair = (!activeWeapon->isSniperRifle() || config->visuals.forceCrosshair == 1) && config->visuals.forceCrosshair != 2;
 		}
-	} else
+	}
+	else
 	{
 		origin = localPlayer->getAbsOrigin();
 		velocity = localPlayer->velocity();
@@ -353,7 +357,7 @@ void LocalPlayerData::update() noexcept
 
 		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && localPlayer->isAlive())
 		{
-			inaccuracy = eyePosition + Vector::fromAngle(interfaces->engine->getViewAngles() + Vector{Helpers::radiansToDegrees(activeWeapon->getInaccuracy() + activeWeapon->getSpread()), 0.0f, 0.0f}) * 1000;
+			inaccuracy = eyePosition + Vector::fromAngle(interfaces->engine->getViewAngles() + Vector{ Helpers::radiansToDegrees(activeWeapon->getInaccuracy() + activeWeapon->getSpread()), 0.0f, 0.0f }) * 1000;
 			shooting = localPlayer->shotsFired() > 1;
 			reloading = activeWeapon->isInReload();
 			nextAttack = std::fmaxf(activeWeapon->nextPrimaryAttack(), localPlayer->nextAttack());
@@ -363,7 +367,7 @@ void LocalPlayerData::update() noexcept
 	}
 }
 
-BaseData::BaseData(Entity *entity) noexcept
+BaseData::BaseData(Entity* entity) noexcept
 {
 	distanceToLocal = entity->getAbsOrigin().distTo(localPlayerData.origin);
 
@@ -375,7 +379,8 @@ BaseData::BaseData(Entity *entity) noexcept
 		const auto collideable = entity->getCollideable();
 		obbMins = collideable->obbMins();
 		obbMaxs = collideable->obbMaxs();
-	} else if (const auto model = entity->getModel())
+	}
+	else if (const auto model = entity->getModel())
 	{
 		obbMins = model->mins;
 		obbMaxs = model->maxs;
@@ -384,9 +389,9 @@ BaseData::BaseData(Entity *entity) noexcept
 	coordinateFrame = entity->toWorldTransform();
 }
 
-EntityData::EntityData(Entity *entity) noexcept : BaseData{entity}
+EntityData::EntityData(Entity* entity) noexcept : BaseData{ entity }
 {
-	name = [](Entity *entity)
+	name = [](Entity* entity)
 	{
 		switch (entity->getClientClass()->classId)
 		{
@@ -405,9 +410,9 @@ EntityData::EntityData(Entity *entity) noexcept : BaseData{entity}
 	}(entity);
 }
 
-ProjectileData::ProjectileData(Entity *projectile) noexcept : BaseData{projectile}
+ProjectileData::ProjectileData(Entity* projectile) noexcept : BaseData{ projectile }
 {
-	name = [](Entity *projectile)
+	name = [](Entity* projectile)
 	{
 		switch (projectile->getClientClass()->classId)
 		{
@@ -438,15 +443,15 @@ ProjectileData::ProjectileData(Entity *projectile) noexcept : BaseData{projectil
 	handle = projectile->handle();
 }
 
-void ProjectileData::update(Entity *projectile) noexcept
+void ProjectileData::update(Entity* projectile) noexcept
 {
-	static_cast<BaseData &>(*this) = {projectile};
+	static_cast<BaseData&>(*this) = { projectile };
 
-	if (const auto &pos = projectile->getAbsOrigin(); trajectory.size() < 1 || trajectory[trajectory.size() - 1].second != pos)
+	if (const auto& pos = projectile->getAbsOrigin(); trajectory.size() < 1 || trajectory[trajectory.size() - 1].second != pos)
 		trajectory.emplace_back(memory->globalVars->realTime, pos);
 }
 
-void PlayerData::update(Entity *entity) noexcept
+void PlayerData::update(Entity* entity) noexcept
 {
 	handle = entity->handle();
 	name = entity->getPlayerName();
@@ -463,7 +468,7 @@ void PlayerData::update(Entity *entity) noexcept
 
 	dormant = false;
 
-	static_cast<BaseData &>(*this) = {entity};
+	static_cast<BaseData&>(*this) = { entity };
 	origin = entity->getAbsOrigin();
 	velocity = entity->velocity();
 	alive = entity->isAlive();
@@ -473,7 +478,7 @@ void PlayerData::update(Entity *entity) noexcept
 		visible = alive && entity->visibleTo(localPlayer.get());
 	else if (const auto obs = localPlayer->getObserverTarget(); obs)
 		visible = alive && entity->visibleTo(obs);
-	
+
 	spotted = entity->spotted();
 	health = entity->health();
 	armor = entity->armor();
@@ -488,16 +493,7 @@ void PlayerData::update(Entity *entity) noexcept
 	{
 		previousUpdateTick = memory->globalVars->tickCount;
 		lbyUpdate = entity->trackLbyUpdate(nextLbyUpdate);
-		if (entity->isChokingPackets())
-		{
-			if (chokedPackets < 0) chokedPackets = 0;
-			chokedPackets++;
-		}
-		else
-		{
-			if (chokedPackets > 0) chokedPackets = 0;
-			chokedPackets--;
-		}
+		justTeleported = origin.distTo(entity->getAbsOrigin()) > 64.0f ? true : false;
 	}
 
 	{
@@ -505,7 +501,7 @@ void PlayerData::update(Entity *entity) noexcept
 		const Vector end = start + Vector::fromAngle(entity->eyeAngles()) * 1000.0f;
 
 		Trace trace;
-		interfaces->engineTrace->traceRay({start, end}, ALL_VISIBLE_CONTENTS | CONTENTS_MOVEABLE | CONTENTS_DETAIL, entity, trace);
+		interfaces->engineTrace->traceRay({ start, end }, ALL_VISIBLE_CONTENTS | CONTENTS_MOVEABLE | CONTENTS_DETAIL, entity, trace);
 		lookingAt = trace.endPos;
 	}
 
@@ -536,7 +532,7 @@ void PlayerData::update(Entity *entity) noexcept
 	if (!studioModel)
 		return;
 
-	const auto &boneMatrices = entity->boneCache();
+	const auto& boneMatrices = entity->boneCache();
 
 	bones.clear();
 	bones.reserve(20);
@@ -568,7 +564,7 @@ void PlayerData::update(Entity *entity) noexcept
 	}
 }
 
-WeaponData::WeaponData(Entity *entity) noexcept : BaseData{entity}
+WeaponData::WeaponData(Entity* entity) noexcept : BaseData{ entity }
 {
 	clip = entity->clip();
 	reserveAmmo = entity->reserveAmmoCount();
@@ -674,13 +670,13 @@ WeaponData::WeaponData(Entity *entity) noexcept : BaseData{entity}
 	}
 }
 
-LootCrateData::LootCrateData(Entity *entity) noexcept : BaseData{entity}
+LootCrateData::LootCrateData(Entity* entity) noexcept : BaseData{ entity }
 {
 	const auto model = entity->getModel();
 	if (!model)
 		return;
 
-	name = [](const char *modelName) -> const char *
+	name = [](const char* modelName) -> const char*
 	{
 		switch (fnv::hashRuntime(modelName))
 		{
@@ -695,12 +691,12 @@ LootCrateData::LootCrateData(Entity *entity) noexcept : BaseData{entity}
 	}(model->name);
 }
 
-const PlayerData *GameData::playerByHandle(int handle) noexcept
+const PlayerData* GameData::playerByHandle(int handle) noexcept
 {
 	return playerByHandleWritable(handle);
 }
 
-ObserverData::ObserverData(Entity *entity, Entity *obs, bool targetIsLocalPlayer, bool targetIsObservedByLocalPlayer) noexcept
+ObserverData::ObserverData(Entity* entity, Entity* obs, bool targetIsLocalPlayer, bool targetIsObservedByLocalPlayer) noexcept
 {
 	entity->getPlayerName(name);
 	obs->getPlayerName(target);
@@ -712,7 +708,7 @@ void BombData::update() noexcept
 {
 	if (memory->plantedC4s->size > 0 && (!*memory->gameRules || (*memory->gameRules)->mapHasBombTarget()))
 	{
-		if (Entity *bomb = (*memory->plantedC4s)[0]; bomb && bomb->c4Ticking())
+		if (Entity* bomb = (*memory->plantedC4s)[0]; bomb && bomb->c4Ticking())
 		{
 			blowTime = bomb->c4BlowTime();
 			timerLength = bomb->c4TimerLength();
@@ -725,7 +721,7 @@ void BombData::update() noexcept
 
 			if (*memory->playerResource)
 			{
-				const auto &bombOrigin = bomb->origin();
+				const auto& bombOrigin = bomb->origin();
 				bombsite = bombOrigin.distTo((*memory->playerResource)->bombsiteCenterA()) > bombOrigin.distTo((*memory->playerResource)->bombsiteCenterB());
 			}
 			return;
@@ -735,19 +731,19 @@ void BombData::update() noexcept
 	blowTime = 0.0f;
 }
 
-InfernoData::InfernoData(Entity *inferno) noexcept
+InfernoData::InfernoData(Entity* inferno) noexcept
 {
-	const auto &origin = inferno->getAbsOrigin();
+	const auto& origin = inferno->getAbsOrigin();
 
 	points.reserve(inferno->fireCount());
 	for (int i = 0; i < inferno->fireCount(); ++i)
 	{
 		if (inferno->fireIsBurning()[i])
-			points.emplace_back(Vector{inferno->fireXDelta()[i] + origin.x, inferno->fireYDelta()[i] + origin.y, inferno->fireZDelta()[i] + origin.z});
+			points.emplace_back(Vector{ inferno->fireXDelta()[i] + origin.x, inferno->fireYDelta()[i] + origin.y, inferno->fireZDelta()[i] + origin.z });
 	}
 }
 
-SmokeData::SmokeData(Entity *smoke) noexcept
+SmokeData::SmokeData(Entity* smoke) noexcept
 {
 	origin = smoke->getAbsOrigin();
 }
@@ -760,7 +756,8 @@ void SessionData::update() noexcept
 		connected = true;
 		address = networkChannel->getAddress();
 		latency = static_cast<int>(networkChannel->getLatency(0) * 1000);
-	} else
+	}
+	else
 		connected = false;
 
 	tickrate = static_cast<int>(1 / memory->globalVars->intervalPerTick);

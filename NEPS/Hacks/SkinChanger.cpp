@@ -49,13 +49,13 @@ static constexpr auto is_knife(WeaponId id)
 	return (id >= WeaponId::Bayonet && id < WeaponId::GloveStuddedBloodhound) || id == WeaponId::KnifeT || id == WeaponId::Knife;
 }
 
-static item_setting *get_by_definition_index(WeaponId weaponId)
+static item_setting* get_by_definition_index(WeaponId weaponId)
 {
-	const auto it = std::find_if(config->skinChanger.begin(), config->skinChanger.end(), [weaponId](const item_setting &e) { return e.enabled && e.itemId == weaponId; });
+	const auto it = std::find_if(config->skinChanger.begin(), config->skinChanger.end(), [weaponId](const item_setting& e) { return e.enabled && e.itemId == weaponId; });
 	return it == config->skinChanger.end() ? nullptr : &*it;
 }
 
-static std::vector<SkinChanger::PaintKit> skinKits = {{ 0, "None" }};
+static std::vector<SkinChanger::PaintKit> skinKits = { { 0, "None" } };
 static std::vector<SkinChanger::PaintKit> gloveKits;
 
 static void initializeKits() noexcept
@@ -69,26 +69,26 @@ static void initializeKits() noexcept
 
 	struct KitWeapon
 	{
-		KitWeapon(int paintKit, WeaponId weaponId, const char *iconPath) noexcept : paintKit{paintKit}, weaponId{weaponId}, iconPath{iconPath} {}
+		KitWeapon(int paintKit, WeaponId weaponId, const char* iconPath) noexcept : paintKit{ paintKit }, weaponId{ weaponId }, iconPath{ iconPath } {}
 		int paintKit;
 		WeaponId weaponId;
-		const char *iconPath;
+		const char* iconPath;
 	};
 
 	std::vector<KitWeapon> kitsWeapons;
 	kitsWeapons.reserve(itemSchema->alternateIcons.numElements);
 
-	for (const auto &node : itemSchema->alternateIcons)
+	for (const auto& node : itemSchema->alternateIcons)
 	{
 		// https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_schema.cpp#L325-L329
 		if (const auto encoded = node.key; (encoded & 3) == 0)
 			kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16), node.value.simpleName.data());
 	}
 
-	std::sort(kitsWeapons.begin(), kitsWeapons.end(), [](const auto &a, const auto &b) { return a.paintKit < b.paintKit; });
+	std::sort(kitsWeapons.begin(), kitsWeapons.end(), [](const auto& a, const auto& b) { return a.paintKit < b.paintKit; });
 
 	std::unordered_map<WeaponId, std::wstring> weaponNames;
-	for (const auto &kitWeapon : kitsWeapons)
+	for (const auto& kitWeapon : kitsWeapons)
 	{
 		if (weaponNames.contains(kitWeapon.weaponId))
 			continue;
@@ -99,7 +99,7 @@ static void initializeKits() noexcept
 
 	skinKits.reserve(itemSchema->paintKits.lastAlloc);
 	gloveKits.reserve(itemSchema->paintKits.lastAlloc);
-	for (const auto &node : itemSchema->paintKits)
+	for (const auto& node : itemSchema->paintKits)
 	{
 		const auto paintKit = node.value;
 
@@ -111,7 +111,7 @@ static void initializeKits() noexcept
 			std::wstring name;
 			std::string iconPath;
 
-			if (const auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto &p, auto id) { return p.paintKit < id; }); it != kitsWeapons.end() && it->paintKit == paintKit->id)
+			if (const auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.paintKit < id; }); it != kitsWeapons.end() && it->paintKit == paintKit->id)
 			{
 				name = weaponNames[it->weaponId];
 				name += L" | ";
@@ -120,9 +120,10 @@ static void initializeKits() noexcept
 
 			name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
 			gloveKits.emplace_back(paintKit->id, std::move(name), std::move(iconPath), paintKit->rarity);
-		} else
+		}
+		else
 		{
-			for (auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto &p, auto id) { return p.paintKit < id; }); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it)
+			for (auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.paintKit < id; }); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it)
 			{
 
 				const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId);
@@ -143,7 +144,7 @@ static void initializeKits() noexcept
 	gloveKits.shrink_to_fit();
 }
 
-void apply_sticker_changer(Entity *item) noexcept
+void apply_sticker_changer(Entity* item) noexcept
 {
 	if (auto config = get_by_definition_index(item->itemDefinitionIndex2()))
 	{
@@ -152,7 +153,7 @@ void apply_sticker_changer(Entity *item) noexcept
 
 		for (std::size_t i = 0; i < config->stickers.size(); ++i)
 		{
-			const auto &sticker = config->stickers[i];
+			const auto& sticker = config->stickers[i];
 			const auto attributeString = "sticker slot " + std::to_string(i) + ' ';
 
 			memory->setOrAddAttributeValueByName(attributeList, (attributeString + "id").c_str(), sticker.kit);
@@ -163,7 +164,7 @@ void apply_sticker_changer(Entity *item) noexcept
 	}
 }
 
-static void apply_config_on_attributable_item(Entity *item, const item_setting &config, const unsigned xuid_low) noexcept
+static void apply_config_on_attributable_item(Entity* item, const item_setting& config, const unsigned xuid_low) noexcept
 {
 	// Force fallback values to be used.
 	item->itemIDHigh() = -1;
@@ -192,10 +193,10 @@ static void apply_config_on_attributable_item(Entity *item, const item_setting &
 
 	item->fallbackWear() = config.wear;
 
-	if (auto &definition_index = item->itemDefinitionIndex(); config.definition_override_index && config.definition_override_index != definition_index)
+	if (auto& definition_index = item->itemDefinitionIndex(); config.definition_override_index && config.definition_override_index != definition_index)
 	{
 		definition_index = config.definition_override_index;
-		if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(WeaponId{definition_index}))
+		if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(WeaponId{ definition_index }))
 		{
 			item->setModelIndex(interfaces->modelInfo->getModelIndex(config.itemId == WeaponId::GloveT ? def->getWorldDisplayModel() : def->getPlayerDisplayModel()));
 			item->preDataUpdate(0);
@@ -204,9 +205,9 @@ static void apply_config_on_attributable_item(Entity *item, const item_setting &
 	apply_sticker_changer(item);
 }
 
-static Entity *make_glove(int entry, int serial) noexcept
+static Entity* make_glove(int entry, int serial) noexcept
 {
-	static std::add_pointer_t<Entity *__cdecl(int, int)> createWearable = nullptr;
+	static std::add_pointer_t<Entity* __cdecl(int, int)> createWearable = nullptr;
 
 	if (!createWearable)
 	{
@@ -241,7 +242,7 @@ static void post_data_update_start(int localHandle) noexcept
 	if (!interfaces->engine->getPlayerInfo(local_index, player_info))
 		return;
 
-    // Handle glove config
+	// Handle glove config
 	{
 		const auto wearables = local->wearables();
 
@@ -269,19 +270,19 @@ static void post_data_update_start(int localHandle) noexcept
 			if (!glove)
 			{
 				auto entry = interfaces->entityList->getHighestEntityIndex() + 1;
-				#define HIJACK_ENTITY 1
-				#if HIJACK_ENTITY == 1
+#define HIJACK_ENTITY 1
+#if HIJACK_ENTITY == 1
 				for (int i = 65; i <= interfaces->entityList->getHighestEntityIndex(); i++)
 				{
 					auto entity = interfaces->entityList->getEntity(i);
 
-					if (entity && entity->getClientClass()->classId == ClassId{70})
+					if (entity && entity->getClientClass()->classId == ClassId{ 70 })
 					{
 						entry = i;
 						break;
 					}
 				}
-				#endif
+#endif
 				const auto serial = rand() % 0x1000;
 
 				glove = make_glove(entry, serial);
@@ -306,9 +307,9 @@ static void post_data_update_start(int localHandle) noexcept
 		}
 	}
 
-    // Handle weapon configs
+	// Handle weapon configs
 	{
-		auto &weapons = local->weapons();
+		auto& weapons = local->weapons();
 
 		for (auto weapon_handle : weapons)
 		{
@@ -320,7 +321,7 @@ static void post_data_update_start(int localHandle) noexcept
 			if (!weapon)
 				continue;
 
-			auto &weaponId = weapon->itemDefinitionIndex2();
+			auto& weaponId = weapon->itemDefinitionIndex2();
 
 			// All knives are terrorist knives.
 			if (const auto active_conf = get_by_definition_index(is_knife(weaponId) ? WeaponId::Knife : weaponId))
@@ -385,7 +386,7 @@ void SkinChanger::scheduleHudUpdate() noexcept
 	hudUpdateRequired = true;
 }
 
-void SkinChanger::overrideHudIcon(GameEvent &event) noexcept
+void SkinChanger::overrideHudIcon(GameEvent& event) noexcept
 {
 	if (!localPlayer)
 		return;
@@ -393,20 +394,20 @@ void SkinChanger::overrideHudIcon(GameEvent &event) noexcept
 	if (event.getInt("attacker") != localPlayer->getUserId())
 		return;
 
-	if (const auto weapon = std::string_view{event.getString("weapon")}; weapon != "knife" && weapon != "knife_t")
+	if (const auto weapon = std::string_view{ event.getString("weapon") }; weapon != "knife" && weapon != "knife_t")
 		return;
 
 	if (const auto active_conf = get_by_definition_index(WeaponId::Knife))
 	{
 		if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(WeaponId(active_conf->definition_override_index)))
 		{
-			if (const auto defName = def->getDefinitionName(); defName && std::string_view{defName}.starts_with("weapon_"))
+			if (const auto defName = def->getDefinitionName(); defName && std::string_view{ defName }.starts_with("weapon_"))
 				event.setString("weapon", defName + 7);
 		}
 	}
 }
 
-void SkinChanger::updateStatTrak(GameEvent &event) noexcept
+void SkinChanger::updateStatTrak(GameEvent& event) noexcept
 {
 	if (!localPlayer)
 		return;
@@ -425,32 +426,32 @@ void SkinChanger::updateStatTrak(GameEvent &event) noexcept
 	}
 }
 
-const std::vector<SkinChanger::PaintKit> &SkinChanger::getSkinKits() noexcept
+const std::vector<SkinChanger::PaintKit>& SkinChanger::getSkinKits() noexcept
 {
 	initializeKits();
 	return skinKits;
 }
 
-const std::vector<SkinChanger::PaintKit> &SkinChanger::getGloveKits() noexcept
+const std::vector<SkinChanger::PaintKit>& SkinChanger::getGloveKits() noexcept
 {
 	initializeKits();
 	return gloveKits;
 }
 
-const std::vector<SkinChanger::PaintKit> &SkinChanger::getStickerKits() noexcept
+const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
 {
 	static std::vector<SkinChanger::PaintKit> stickerKits;
 	if (stickerKits.empty())
 	{
-		const auto &stickerMap = memory->itemSystem()->getItemSchema()->stickerKits;
+		const auto& stickerMap = memory->itemSystem()->getItemSchema()->stickerKits;
 
 		stickerKits.reserve(stickerMap.numElements + 1);
 		stickerKits.emplace_back(0, "None");
 
-		for (const auto &node : stickerMap)
+		for (const auto& node : stickerMap)
 		{
 			const auto stickerKit = node.value;
-			if (std::string_view name{stickerKit->name.data()}; name.starts_with("spray") || name.starts_with("patch") || name.ends_with("graffiti"))
+			if (std::string_view name{ stickerKit->name.data() }; name.starts_with("spray") || name.starts_with("patch") || name.ends_with("graffiti"))
 				continue;
 			std::wstring name = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
 			stickerKits.emplace_back(stickerKit->id, std::move(name), stickerKit->inventoryImage.data(), stickerKit->rarity);
@@ -462,12 +463,12 @@ const std::vector<SkinChanger::PaintKit> &SkinChanger::getStickerKits() noexcept
 	return stickerKits;
 }
 
-const std::vector<SkinChanger::Quality> &SkinChanger::getQualities() noexcept
+const std::vector<SkinChanger::Quality>& SkinChanger::getQualities() noexcept
 {
 	static std::vector<Quality> qualities;
 	if (qualities.empty())
 	{
-		for (const auto &node : memory->itemSystem()->getItemSchema()->qualities)
+		for (const auto& node : memory->itemSystem()->getItemSchema()->qualities)
 		{
 			const auto quality = node.value;
 			if (const auto localizedName = interfaces->localize->findAsUTF8(quality.name); localizedName != quality.name)
@@ -481,14 +482,14 @@ const std::vector<SkinChanger::Quality> &SkinChanger::getQualities() noexcept
 	return qualities;
 }
 
-const std::vector<SkinChanger::Item> &SkinChanger::getGloveTypes() noexcept
+const std::vector<SkinChanger::Item>& SkinChanger::getGloveTypes() noexcept
 {
 	static std::vector<SkinChanger::Item> gloveTypes;
 	if (gloveTypes.empty())
 	{
 		gloveTypes.emplace_back(WeaponId{}, "Default");
 
-		for (const auto &node : memory->itemSystem()->getItemSchema()->itemsSorted)
+		for (const auto& node : memory->itemSystem()->getItemSchema()->itemsSorted)
 		{
 			const auto item = node.value;
 			if (std::strcmp(item->getItemTypeName(), "#Type_Hands") == 0 && item->isPaintable())
@@ -501,37 +502,37 @@ const std::vector<SkinChanger::Item> &SkinChanger::getGloveTypes() noexcept
 
 const std::vector<SkinChanger::Item>& SkinChanger::getKnifeTypes() noexcept
 {
-    static std::vector<SkinChanger::Item> knifeTypes;
-    if (knifeTypes.empty()) {
-        knifeTypes.emplace_back(WeaponId{}, "Default");
+	static std::vector<SkinChanger::Item> knifeTypes;
+	if (knifeTypes.empty()) {
+		knifeTypes.emplace_back(WeaponId{}, "Default");
 
-        for (const auto& node : memory->itemSystem()->getItemSchema()->itemsSorted) {
-            const auto item = node.value;
-            if (std::strcmp(item->getItemTypeName(), "#CSGO_Type_Knife") == 0 && item->getRarity() == 6)
-                knifeTypes.emplace_back(item->getWeaponId(), interfaces->localize->findAsUTF8(item->getItemBaseName()));
-        }
-    }
+		for (const auto& node : memory->itemSystem()->getItemSchema()->itemsSorted) {
+			const auto item = node.value;
+			if (std::strcmp(item->getItemTypeName(), "#CSGO_Type_Knife") == 0 && item->getRarity() == 6)
+				knifeTypes.emplace_back(item->getWeaponId(), interfaces->localize->findAsUTF8(item->getItemBaseName()));
+		}
+	}
 
-    return knifeTypes;
+	return knifeTypes;
 }
 
-SkinChanger::PaintKit::PaintKit(int id, const std::string &name, int rarity) noexcept : id{id}, name{name}, rarity{rarity}
+SkinChanger::PaintKit::PaintKit(int id, const std::string& name, int rarity) noexcept : id{ id }, name{ name }, rarity{ rarity }
 {
 	nameUpperCase = Helpers::toUpper(Helpers::toWideString(name));
 }
 
-SkinChanger::PaintKit::PaintKit(int id, std::string &&name, int rarity) noexcept : id{id}, name{std::move(name)}, rarity{rarity}
+SkinChanger::PaintKit::PaintKit(int id, std::string&& name, int rarity) noexcept : id{ id }, name{ std::move(name) }, rarity{ rarity }
 {
 	nameUpperCase = Helpers::toUpper(Helpers::toWideString(this->name));
 }
 
-SkinChanger::PaintKit::PaintKit(int id, std::wstring &&name, std::string &&iconPath, int rarity) noexcept : id{id}, nameUpperCase{std::move(name)}, iconPath{std::move(iconPath)}, rarity{rarity}
+SkinChanger::PaintKit::PaintKit(int id, std::wstring&& name, std::string&& iconPath, int rarity) noexcept : id{ id }, nameUpperCase{ std::move(name) }, iconPath{ std::move(iconPath) }, rarity{ rarity }
 {
 	this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
 	nameUpperCase = Helpers::toUpper(nameUpperCase);
 }
 
-SkinChanger::PaintKit::PaintKit(int id, std::wstring &&name, int rarity) noexcept : id{id}, nameUpperCase{std::move(name)}, rarity{rarity}
+SkinChanger::PaintKit::PaintKit(int id, std::wstring&& name, int rarity) noexcept : id{ id }, nameUpperCase{ std::move(name) }, rarity{ rarity }
 {
 	this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
 	nameUpperCase = Helpers::toUpper(nameUpperCase);
@@ -544,39 +545,39 @@ static int random(int min, int max) noexcept
 
 static int get_new_animation(const uint32_t model, const int sequence) noexcept
 {
-    enum Sequence
-    {
-        SEQUENCE_DEFAULT_DRAW = 0,
-        SEQUENCE_DEFAULT_IDLE1 = 1,
-        SEQUENCE_DEFAULT_IDLE2 = 2,
-        SEQUENCE_DEFAULT_LIGHT_MISS1 = 3,
-        SEQUENCE_DEFAULT_LIGHT_MISS2 = 4,
-        SEQUENCE_DEFAULT_HEAVY_MISS1 = 9,
-        SEQUENCE_DEFAULT_HEAVY_HIT1 = 10,
-        SEQUENCE_DEFAULT_HEAVY_BACKSTAB = 11,
-        SEQUENCE_DEFAULT_LOOKAT01 = 12,
+	enum Sequence
+	{
+		SEQUENCE_DEFAULT_DRAW = 0,
+		SEQUENCE_DEFAULT_IDLE1 = 1,
+		SEQUENCE_DEFAULT_IDLE2 = 2,
+		SEQUENCE_DEFAULT_LIGHT_MISS1 = 3,
+		SEQUENCE_DEFAULT_LIGHT_MISS2 = 4,
+		SEQUENCE_DEFAULT_HEAVY_MISS1 = 9,
+		SEQUENCE_DEFAULT_HEAVY_HIT1 = 10,
+		SEQUENCE_DEFAULT_HEAVY_BACKSTAB = 11,
+		SEQUENCE_DEFAULT_LOOKAT01 = 12,
 
-        SEQUENCE_BUTTERFLY_DRAW = 0,
-        SEQUENCE_BUTTERFLY_DRAW2 = 1,
-        SEQUENCE_BUTTERFLY_LOOKAT01 = 13,
-        SEQUENCE_BUTTERFLY_LOOKAT03 = 15,
+		SEQUENCE_BUTTERFLY_DRAW = 0,
+		SEQUENCE_BUTTERFLY_DRAW2 = 1,
+		SEQUENCE_BUTTERFLY_LOOKAT01 = 13,
+		SEQUENCE_BUTTERFLY_LOOKAT03 = 15,
 
-        SEQUENCE_FALCHION_IDLE1 = 1,
-        SEQUENCE_FALCHION_HEAVY_MISS1 = 8,
-        SEQUENCE_FALCHION_HEAVY_MISS1_NOFLIP = 9,
-        SEQUENCE_FALCHION_LOOKAT01 = 12,
-        SEQUENCE_FALCHION_LOOKAT02 = 13,
+		SEQUENCE_FALCHION_IDLE1 = 1,
+		SEQUENCE_FALCHION_HEAVY_MISS1 = 8,
+		SEQUENCE_FALCHION_HEAVY_MISS1_NOFLIP = 9,
+		SEQUENCE_FALCHION_LOOKAT01 = 12,
+		SEQUENCE_FALCHION_LOOKAT02 = 13,
 
-        SEQUENCE_DAGGERS_IDLE1 = 1,
-        SEQUENCE_DAGGERS_LIGHT_MISS1 = 2,
-        SEQUENCE_DAGGERS_LIGHT_MISS5 = 6,
-        SEQUENCE_DAGGERS_HEAVY_MISS2 = 11,
-        SEQUENCE_DAGGERS_HEAVY_MISS1 = 12,
+		SEQUENCE_DAGGERS_IDLE1 = 1,
+		SEQUENCE_DAGGERS_LIGHT_MISS1 = 2,
+		SEQUENCE_DAGGERS_LIGHT_MISS5 = 6,
+		SEQUENCE_DAGGERS_HEAVY_MISS2 = 11,
+		SEQUENCE_DAGGERS_HEAVY_MISS1 = 12,
 
-        SEQUENCE_BOWIE_IDLE1 = 1,
+		SEQUENCE_BOWIE_IDLE1 = 1,
 	};
 
-    // Hashes for best performance.
+	// Hashes for best performance.
 	switch (model)
 	{
 	case fnv::hash("models/weapons/v_knife_butterfly.mdl"):
@@ -680,7 +681,7 @@ static int get_new_animation(const uint32_t model, const int sequence) noexcept
 	}
 }
 
-void SkinChanger::fixKnifeAnimation(Entity *viewModelWeapon, long &sequence) noexcept
+void SkinChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept
 {
 	if (!is_knife(viewModelWeapon->itemDefinitionIndex2()))
 		return;

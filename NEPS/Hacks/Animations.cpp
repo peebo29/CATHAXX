@@ -11,7 +11,7 @@
 #include "../SDK/Input.h"
 #include "../SDK/UserCmd.h"
 
-static AnimState *desyncedState = new AnimState{};
+static AnimState* desyncedState = new AnimState{};
 static std::array<Matrix3x4, MAX_STUDIO_BONES> desyncedBones;
 
 void Animations::releaseState() noexcept
@@ -23,16 +23,16 @@ void Animations::releaseState() noexcept
 		localPlayer->clientAnimations() = true;
 }
 
-void Animations::getDesyncedBoneMatrices(Matrix3x4 *out) noexcept
+void Animations::getDesyncedBoneMatrices(Matrix3x4* out) noexcept
 {
 	if (out) std::copy(desyncedBones.begin(), desyncedBones.end(), out);
 }
 
-void Animations::computeDesync(const UserCmd &cmd, bool sendPacket) noexcept
+void Animations::computeDesync(const UserCmd& cmd, bool sendPacket) noexcept
 {
 	assert(desyncedState);
 
-	auto &poseParams = localPlayer->poseParams();
+	auto& poseParams = localPlayer->poseParams();
 	const auto layers = localPlayer->animLayers();
 	if (!desyncedState || !layers)
 		return;
@@ -57,22 +57,22 @@ void Animations::computeDesync(const UserCmd &cmd, bool sendPacket) noexcept
 		std::copy(poseParams.begin(), poseParams.end(), backupPoseParams.begin());
 
 		desyncedState->update(cmd.viewangles);
-		memory->setAbsAngle(localPlayer.get(), {0.0f, desyncedState->goalFeetYaw, 0.0f});
+		memory->setAbsAngle(localPlayer.get(), { 0.0f, desyncedState->goalFeetYaw, 0.0f });
 
 		memory->invalidateBoneCache(localPlayer.get());
 		const bool updated = localPlayer->setupBones(desyncedBones.data(), MAX_STUDIO_BONES, BONE_USED_BY_ANYTHING, memory->globalVars->currentTime);
 
-		if (const auto &origin = localPlayer->getRenderOrigin(); updated)
-			for (auto &m : desyncedBones)
+		if (const auto& origin = localPlayer->getRenderOrigin(); updated)
+			for (auto& m : desyncedBones)
 				m.setOrigin(m.origin() - origin);
 
 		std::copy(backupLayers.begin(), backupLayers.end(), layers);
 		std::copy(backupPoseParams.begin(), backupPoseParams.end(), poseParams.begin());
-		memory->setAbsAngle(localPlayer.get(), {0.0f, backupYaw, 0.0f});
+		memory->setAbsAngle(localPlayer.get(), { 0.0f, backupYaw, 0.0f });
 	}
 }
 
-void Animations::syncLocal(const UserCmd &cmd, bool sendPacket) noexcept
+void Animations::syncLocal(const UserCmd& cmd, bool sendPacket) noexcept
 {
 	if (!localPlayer) return;
 
@@ -84,7 +84,7 @@ void Animations::syncLocal(const UserCmd &cmd, bool sendPacket) noexcept
 		return;
 	}
 
-	auto &poseParams = localPlayer->poseParams();
+	auto& poseParams = localPlayer->poseParams();
 	auto state = localPlayer->animState();
 	const auto layers = localPlayer->animLayers();
 	if (!state || !layers)
@@ -110,8 +110,8 @@ void Animations::syncLocal(const UserCmd &cmd, bool sendPacket) noexcept
 			networkedYaw = state->goalFeetYaw;
 		}
 	}
-	
-	memory->setAbsAngle(localPlayer.get(), {0.0f, networkedYaw, 0.0f});
+
+	memory->setAbsAngle(localPlayer.get(), { 0.0f, networkedYaw, 0.0f });
 	std::copy(networkedLayers.begin(), networkedLayers.end(), layers);
 	std::copy(networkedPoseParams.begin(), networkedPoseParams.end(), poseParams.begin());
 
@@ -119,15 +119,15 @@ void Animations::syncLocal(const UserCmd &cmd, bool sendPacket) noexcept
 	localPlayer->setupBones(nullptr, MAX_STUDIO_BONES, BONE_USED_BY_ANYTHING, memory->globalVars->currentTime);
 }
 
-void Animations::resolveDesync(Entity *animatable) noexcept
+void Animations::resolveDesync(Entity* animatable) noexcept
 {
 	auto state = animatable->animState();
 	if (!state)
 		return;
 
-	constexpr auto authentic = [](Entity *animatable) noexcept
+	constexpr auto authentic = [](Entity* animatable) noexcept
 	{
-		#ifndef NEPS_DEBUG
+#ifndef NEPS_DEBUG
 		if (animatable->moveType() == MoveType::Ladder) return true;
 		if (animatable->moveType() == MoveType::Noclip) return true;
 		if (animatable->isBot()) return true;
@@ -139,10 +139,10 @@ void Animations::resolveDesync(Entity *animatable) noexcept
 
 		if (auto playerData = GameData::playerByHandle(animatable->handle()))
 		{
-			if (playerData->chokedPackets < -3) return true;
 			if (playerData->lbyUpdate) return true;
+			if (playerData->justTeleported) return true;
 		}
-		#endif // NEPS_DEBUG
+#endif  NEPS_DEBUG
 
 		return false;
 	};
@@ -153,14 +153,14 @@ void Animations::resolveDesync(Entity *animatable) noexcept
 	{
 		const float lbyDelta = Helpers::angleDiffDeg(animatable->eyeAngles().y, state->goalFeetYaw);
 
-		const std::array<float, 3U> positions = {-maxDesync, 0.0f, maxDesync};
-		//std::vector<float> distances;
-		//for (const auto &position : positions)
-		//	distances.emplace_back(std::fabsf(position - lbyDelta));
+		const std::array<float, 3U> positions = { -maxDesync, 0.0f, maxDesync };
+		std::vector<float> distances;
+		for (const auto &position : positions)
+			distances.emplace_back(std::fabsf(position - lbyDelta));
 
-		//const auto current = std::distance(distances.begin(), std::min_element(distances.begin(), distances.end()));
+		const auto current = std::distance(distances.begin(), std::min_element(distances.begin(), distances.end()));
 
-		//state->goalFeetYaw = Helpers::normalizeDeg(animatable->eyeAngles().y + positions[(current + Aimbot::getMisses() + 1) % positions.size()]);
+		state->goalFeetYaw = Helpers::normalizeDeg(animatable->eyeAngles().y + positions[(current + Aimbot::getMisses() + 1) % positions.size()]);
 		state->goalFeetYaw = Helpers::normalizeDeg(animatable->eyeAngles().y + positions[Aimbot::getMisses() % positions.size()]);
 	}
 

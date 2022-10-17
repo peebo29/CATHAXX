@@ -7,12 +7,16 @@
 #include "../SDK/GlowObjectManager.h"
 #include "../SDK/GlobalVars.h"
 #include "../lib/Helpers.hpp"
+#include "NEPS/Players.h"
 
 static std::vector<std::pair<int, int>> customGlowEntities;
 
 void Glow::render() noexcept
 {
     if (!localPlayer)
+		return;
+
+	if (config->players.spectatorFilter && config->players.filterGlow && !Players::noSpectators)
 		return;
 
 	const auto &glow = config->glow;
@@ -38,7 +42,7 @@ void Glow::render() noexcept
 		case ClassId::SmokeGrenadeProjectile:
 		case ClassId::SnowballProjectile:
 		case ClassId::Hostage:
-		//case ClassId::Ragdoll:
+		case ClassId::Ragdoll:
 			if (!memory->glowObjectManager->hasGlowEffect(entity))
 			{
 				if (auto index{memory->glowObjectManager->registerGlowObject(entity)}; index != -1)
@@ -122,7 +126,7 @@ void Glow::render() noexcept
 			applyGlow(glow[18]); break;
 
 		case ClassId::Hostage: applyGlow(glow[19]); break;
-		//case ClassId::Ragdoll: applyGlow(glow[20]); break;
+		case ClassId::Ragdoll: applyGlow(glow[20]); break;
 		default:
 			if (entity->isWeapon())
 			{
