@@ -16,19 +16,20 @@
 #include "../SDK/ModelInfo.h"
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
+#include "NEPS/Players.h"
 
 #include "../lib/Helpers.hpp"
 
 static Vector targetAngle;
 static int targetHandle;
-static const Record *targetRecord;
+static const Record* targetRecord;
 
 int Aimbot::getTargetHandle() noexcept
 {
 	return targetHandle;
 }
 
-const Record *Aimbot::getTargetRecord() noexcept
+const Record* Aimbot::getTargetRecord() noexcept
 {
 	return targetRecord;
 }
@@ -36,7 +37,7 @@ const Record *Aimbot::getTargetRecord() noexcept
 static int shots = 0;
 static int hits = 0;
 
-void Aimbot::missCounter(GameEvent *event) noexcept
+void Aimbot::missCounter(GameEvent* event) noexcept
 {
 	if (!localPlayer)
 		return;
@@ -66,10 +67,10 @@ void Aimbot::resetMissCounter() noexcept
 
 int Aimbot::getMisses() noexcept
 {
-    return shots - hits;
+	return shots - hits;
 }
 
-void Aimbot::predictPeek(UserCmd *cmd) noexcept
+void Aimbot::predictPeek(UserCmd* cmd) noexcept
 {
 	if (!localPlayer)
 		return;
@@ -88,15 +89,15 @@ void Aimbot::predictPeek(UserCmd *cmd) noexcept
 	if (localPlayer->shotsFired() > 0 && !activeWeapon->isFullAuto())
 		return;
 
-	const auto &cfg = Config::Aimbot::getRelevantConfig();
-	
+	const auto& cfg = Config::Aimbot::getRelevantConfig();
+
 	if (!cfg.autoStop && !cfg.autoScope)
 		return;
 
 	if (!cfg.betweenShots && activeWeapon->nextPrimaryAttack() > time && (!activeWeapon->burstMode() || activeWeapon->nextBurstShot() > time))
 		return;
 
-	constexpr auto predictionFactor = 0.07f;
+	constexpr auto predictionFactor = 5.50f;
 
 	for (int i = 1; i <= interfaces->engine->getMaxClients(); i++)
 	{
@@ -117,13 +118,20 @@ void Aimbot::predictPeek(UserCmd *cmd) noexcept
 		bool occludedBacktrack = true;
 		int damage = Helpers::findDamage(localPlayer.get(), entity, occluded, cfg.friendlyFire, predictionFactor);
 
-		const auto &records = Backtrack::getRecords(entity->index());
+		const auto& records = Backtrack::getRecords(entity->index());
 
-		if (const auto it = std::find_if(records.rbegin(), records.rend(), [](const Record &record) noexcept { return Backtrack::valid(record.simulationTime); }); it != records.rend())
+		if (const auto it = std::find_if(records.rbegin(), records.rend(), [](const Record& record) noexcept { return Backtrack::valid(record.simulationTime); }); it != records.rend())
 			damage = std::max(damage, Helpers::findDamage(localPlayer.get(), entity, occludedBacktrack, cfg.friendlyFire, predictionFactor, &(*it)));
 
 		if (static Helpers::KeyBindState flag; !flag[cfg.bind]) return;
 		
+		if (config->players.spectatorFilter && config->players.filterAim && !Players::noSpectators)
+			return;
+		
+		// if the players feature and aim filter is enabled, and the player was not flagged as a target, then don't target them
+		if (config->players.enabled && config->players.filterAim && !Players::players[i].flagged)
+			continue;
+
 		if (damage > 0 && (!cfg.visibleOnly || !occluded || !occludedBacktrack))
 		{
 			if (cfg.autoScope && !localPlayer->isScoped() && activeWeapon->isSniperRifle())
@@ -143,9 +151,9 @@ void Aimbot::predictPeek(UserCmd *cmd) noexcept
 #ifndef NEPS_DEBUG
 __forceinline
 #endif
-void chooseTarget(UserCmd *cmd) noexcept
+void chooseTarget(UserCmd* cmd) noexcept
 {
-	const auto &cfg = Config::Aimbot::getRelevantConfig();
+	const auto& cfg = Config::Aimbot::getRelevantConfig();
 
 	targetAngle = Vector{};
 	targetHandle = 0;
@@ -159,7 +167,7 @@ void chooseTarget(UserCmd *cmd) noexcept
 	if (!weaponData)
 		return;
 
-	const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() * Vector{cfg.recoilReductionV / 100, cfg.recoilReductionH / 100, 1.0f} : Vector{};
+	const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() * Vector { cfg.recoilReductionV / 100, cfg.recoilReductionH / 100, 1.0f } : Vector{};
 	const auto localPlayerEyePosition = localPlayer->getEyePosition();
 	bool doOverride = false;
 	{
@@ -194,16 +202,16 @@ void chooseTarget(UserCmd *cmd) noexcept
 
 		std::array<Matrix3x4, MAX_STUDIO_BONES> bones;
 		{
-			const auto &boneMatrices = entity->boneCache();
+			const auto& boneMatrices = entity->boneCache();
 			std::copy(boneMatrices.memory, boneMatrices.memory + boneMatrices.size, bones.begin());
 		}
 
-		const Record *backtrackRecord = nullptr;
+		const Record* backtrackRecord = nullptr;
 		if (config->backtrack.enabled && enemy)
 		{
-			const auto &records = Backtrack::getRecords(entity->index());
+			const auto& records = Backtrack::getRecords(entity->index());
 
-			if (const auto it = std::find_if(records.rbegin(), records.rend(), [](const Record &record) noexcept { return Backtrack::valid(record.simulationTime); }); it != records.rend())
+			if (const auto it = std::find_if(records.rbegin(), records.rend(), [](const Record& record) noexcept { return Backtrack::valid(record.simulationTime); }); it != records.rend())
 				backtrackRecord = &(*it);
 
 			[[maybe_unused]] bool occluded = true;
@@ -323,7 +331,8 @@ void chooseTarget(UserCmd *cmd) noexcept
 					points.emplace_back(hitbox.bbMax.transform(bones[hitbox.bone]));
 					break;
 				}
-			} else
+			}
+			else
 			{
 				switch (hitboxIdx)
 				{
@@ -343,7 +352,7 @@ void chooseTarget(UserCmd *cmd) noexcept
 
 			const float radius = Helpers::approxRadius(hitbox, hitboxIdx);
 
-			for (const auto &point : points)
+			for (const auto& point : points)
 			{
 				const auto extrapolatedPoint = point + entity->velocity() * memory->globalVars->intervalPerTick;
 
@@ -376,7 +385,8 @@ void chooseTarget(UserCmd *cmd) noexcept
 						continue;
 					if (damage <= std::min(bestDamage, targetHealth))
 						continue;
-				} else
+				}
+				else
 				{
 					if (damage <= std::min(minDamageAutoWall, targetHealth))
 						continue;
@@ -431,7 +441,7 @@ void chooseTarget(UserCmd *cmd) noexcept
 	}
 }
 
-void Aimbot::run(UserCmd *cmd) noexcept
+void Aimbot::run(UserCmd* cmd) noexcept
 {
 	if (!localPlayer)
 		return;
@@ -447,7 +457,7 @@ void Aimbot::run(UserCmd *cmd) noexcept
 	if (!activeWeapon || !activeWeapon->clip() || activeWeapon->isKnife())
 		return;
 
-	const auto &cfg = Config::Aimbot::getRelevantConfig();
+	const auto& cfg = Config::Aimbot::getRelevantConfig();
 
 	const auto weaponData = activeWeapon->getWeaponData();
 	if (!weaponData)
@@ -455,13 +465,13 @@ void Aimbot::run(UserCmd *cmd) noexcept
 
 	if (static Helpers::KeyBindState flag; !flag[cfg.bind]) return;
 
-    if (!cfg.betweenShots && activeWeapon->nextPrimaryAttack() > time && (!activeWeapon->burstMode() || activeWeapon->nextBurstShot() > time))
-        return;
+	if (!cfg.betweenShots && activeWeapon->nextPrimaryAttack() > time && (!activeWeapon->burstMode() || activeWeapon->nextBurstShot() > time))
+		return;
 
-    if (!cfg.ignoreFlash && localPlayer->isFlashed())
-        return;
+	if (!cfg.ignoreFlash && localPlayer->isFlashed())
+		return;
 
-    if (cmd->buttons & UserCmd::Button_Attack || cfg.autoShoot || cfg.aimlock) {
+	if (cmd->buttons & UserCmd::Button_Attack || cfg.autoShoot || cfg.aimlock) {
 
 		if (cfg.scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->isScoped() && !cfg.autoScope)
 			return;
@@ -500,8 +510,7 @@ void Aimbot::run(UserCmd *cmd) noexcept
 				else
 					aimVelocity += targetAngle;
 			}
-
-			if (targetAngle.notNull() && !cfg.humanize)
+			else if (targetAngle.notNull())
 			{
 				cmd->viewangles += targetAngle;
 
@@ -516,7 +525,8 @@ void Aimbot::run(UserCmd *cmd) noexcept
 			{
 				cmd->buttons &= ~UserCmd::Button_Attack;
 				lastAngles = cmd->viewangles;
-			} else lastAngles = Vector{};
+			}
+			else lastAngles = Vector{};
 
 			lastCommand = cmd->commandNumber;
 		}

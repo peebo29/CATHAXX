@@ -15,6 +15,22 @@ struct Vector;
 // Easily switch hooking method for all hooks, choose between MinHook/VmtHook/VmtSwap
 using HookType = MinHook;
 
+//HMODULE           WINAPI     Hooks_LoadLibraryExW(LPCWSTR, HANDLE, DWORD);
+//HMODULE           WINAPI     Hooks_LoadLibraryExW_SteamClient(LPCWSTR, HANDLE, DWORD);
+//FARPROC           WINAPI     Hooks_GetProcAddress(HMODULE, LPCSTR);
+//VOID              WINAPI     Hooks_GetSystemInfo(LPSYSTEM_INFO);
+//BOOL              WINAPI     Hooks_GetVersionExA(LPOSVERSIONINFOEXA);
+//UINT              WINAPI     Hooks_GetSystemDirectoryW(LPWSTR, UINT);
+//UINT              WINAPI     Hooks_GetWindowsDirectoryW(LPWSTR, UINT);
+//DWORD             WINAPI     Hooks_GetCurrentProcessId(VOID);
+//DWORD             WINAPI     Hooks_GetCurrentThreadId(VOID);
+
+struct SoundInfo;
+struct Vector;
+
+// Easily switch hooking method for all hooks, choose between MinHook/VmtHook/VmtSwap
+using HookType = MinHook;
+
 class Hooks
 {
 public:
@@ -28,11 +44,11 @@ public:
 	HWND getProcessWindow() noexcept { return window; }
 
 	WNDPROC originalWndProc;
-	std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9 *, const RECT *, const RECT *, HWND, const RGNDATA *)> originalPresent;
-	std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9 *, D3DPRESENT_PARAMETERS *)> originalReset;
-	std::add_pointer_t<int __fastcall(SoundInfo &)> originalDispatchSound;
+	std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*)> originalPresent;
+	std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> originalReset;
+	std::add_pointer_t<int __fastcall(SoundInfo&)> originalDispatchSound;
 	std::add_pointer_t<void __fastcall()> originalCheckFileCRC;
-	std::add_pointer_t<void __fastcall(void *, void *, void *, void *, void *, void *)> originalDoProceduralFootPlant;
+	std::add_pointer_t<void __fastcall(void*, void*, void*, void*, void*, void*)> originalDoProceduralFootPlant;
 
 	HookType bspQuery;
 	HookType client;

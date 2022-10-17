@@ -3,6 +3,7 @@
 #include "Chams.h"
 #include "Animations.h"
 #include "Backtrack.h"
+#include "NEPS/Players.h"
 
 #include "../Config.h"
 #include "../GameData.h"
@@ -99,7 +100,7 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, Matrix3x
 	this->customBoneToWorld = customBoneToWorld;
 
     if (std::string_view{info.model->name}.starts_with("models/weapons/v_")) {
-        // info.model->name + 17 -> small optimization, skip "models/weapons/v_"
+        /*info.model->name + 17 -> small optimization, skip "models/weapons/v_"*/
         if (std::strstr(info.model->name + 17, "sleeve"))
             renderSleeves();
         else if (std::strstr(info.model->name + 17, "arms"))
@@ -161,6 +162,9 @@ void Chams::renderPlayer(Entity* player) noexcept
 		if (!appliedChams) hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
     } else if (localPlayer->isOtherEnemy(player))
 	{
+		if (config->players.spectatorFilter && config->players.filterChams && !Players::noSpectators)
+			return;
+
 		if (config->backtrack.enabled)
 		{
 			const auto &records = Backtrack::getRecords(player->index());

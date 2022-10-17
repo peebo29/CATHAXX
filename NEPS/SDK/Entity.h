@@ -102,8 +102,8 @@ enum class ObsMode
 class Collideable
 {
 public:
-	VIRTUAL_METHOD(const Vector &, obbMins, 1, (), (this))
-	VIRTUAL_METHOD(const Vector &, obbMaxs, 2, (), (this))
+	VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
+		VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), (this))
 };
 
 enum class Team
@@ -118,48 +118,48 @@ class Entity
 {
 public:
 	VIRTUAL_METHOD(void, release, 1, (), (this + sizeof(uintptr_t) * 2))
-	VIRTUAL_METHOD(ClientClass *, getClientClass, 2, (), (this + sizeof(uintptr_t) * 2))
-	VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
-	VIRTUAL_METHOD(void, postDataUpdate, 7, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
-	VIRTUAL_METHOD(bool, isDormant, 9, (), (this + sizeof(uintptr_t) * 2))
-	VIRTUAL_METHOD(int, index, 10, (), (this + sizeof(uintptr_t) * 2))
-	VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + sizeof(uintptr_t) * 2))
+		VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + sizeof(uintptr_t) * 2))
+		VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
+		VIRTUAL_METHOD(void, postDataUpdate, 7, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
+		VIRTUAL_METHOD(bool, isDormant, 9, (), (this + sizeof(uintptr_t) * 2))
+		VIRTUAL_METHOD(int, index, 10, (), (this + sizeof(uintptr_t) * 2))
+		VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + sizeof(uintptr_t) * 2))
 
-	VIRTUAL_METHOD(Vector &, getRenderOrigin, 1, (), (this + sizeof(uintptr_t)))
-	VIRTUAL_METHOD(bool, shouldDraw, 3, (), (this + sizeof(uintptr_t)))
-	VIRTUAL_METHOD(const Model *, getModel, 8, (), (this + sizeof(uintptr_t)))
-	VIRTUAL_METHOD(const Matrix3x4 &, toWorldTransform, 32, (), (this + sizeof(uintptr_t)))
+		VIRTUAL_METHOD(Vector&, getRenderOrigin, 1, (), (this + sizeof(uintptr_t)))
+		VIRTUAL_METHOD(bool, shouldDraw, 3, (), (this + sizeof(uintptr_t)))
+		VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + sizeof(uintptr_t)))
+		VIRTUAL_METHOD(const Matrix3x4&, toWorldTransform, 32, (), (this + sizeof(uintptr_t)))
 
-	VIRTUAL_METHOD(int &, handle, 2, (), (this))
-	VIRTUAL_METHOD(Collideable *, getCollideable, 3, (), (this))
-	VIRTUAL_METHOD(const Vector &, getAbsOrigin, 10, (), (this))
-	VIRTUAL_METHOD(const Vector &, getAbsAngle, 11, (), (this))
-	VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
-	VIRTUAL_METHOD(bool, getAttachment, 84, (int index, Vector &origin), (this, index, std::ref(origin)))
-	VIRTUAL_METHOD(int, health, 122, (), (this))
-	VIRTUAL_METHOD(bool, isAlive, 156, (), (this))
-	VIRTUAL_METHOD(bool, isPlayer, 158, (), (this))
-	VIRTUAL_METHOD(bool, isWeapon, 166, (), (this))
-	VIRTUAL_METHOD(void, updateClientSideAnimation, 224, (), (this))
-	VIRTUAL_METHOD(int, getWeaponSubType, 282, (), (this))
-	VIRTUAL_METHOD(ObsMode, getObserverMode, 294, (), (this))
-	VIRTUAL_METHOD(float, getSpread, 453, (), (this))
-	VIRTUAL_METHOD(WeaponType, getWeaponType, 455, (), (this))
-	VIRTUAL_METHOD(WeaponInfo *, getWeaponData, 461, (), (this))
-	VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, 468, (Entity *viewModel), (this, viewModel))
-	VIRTUAL_METHOD(int, getMuzzleAttachmentIndex3rdPerson, 469, (), (this))
-	VIRTUAL_METHOD(float, getInaccuracy, 483, (), (this))
-	VIRTUAL_METHOD(void, updateInaccuracyPenalty, 484, (), (this))
+		VIRTUAL_METHOD(int&, handle, 2, (), (this))
+		VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
+		VIRTUAL_METHOD(const Vector&, getAbsOrigin, 10, (), (this))
+		VIRTUAL_METHOD(const Vector&, getAbsAngle, 11, (), (this))
+		VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
+		VIRTUAL_METHOD(bool, getAttachment, 84, (int index, Vector& origin), (this, index, std::ref(origin)))
+		VIRTUAL_METHOD(int, health, 122, (), (this))
+		VIRTUAL_METHOD(bool, isAlive, 156, (), (this))
+		VIRTUAL_METHOD(bool, isPlayer, 158, (), (this))
+		VIRTUAL_METHOD(bool, isWeapon, 166, (), (this))
+		VIRTUAL_METHOD(void, updateClientSideAnimation, 224, (), (this))
+		VIRTUAL_METHOD(int, getWeaponSubType, 282, (), (this))
+		VIRTUAL_METHOD(ObsMode, getObserverMode, 294, (), (this))
+		VIRTUAL_METHOD(float, getSpread, 453, (), (this))
+		VIRTUAL_METHOD(WeaponType, getWeaponType, 455, (), (this))
+		VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 461, (), (this))
+		VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, 468, (Entity* viewModel), (this, viewModel))
+		VIRTUAL_METHOD(int, getMuzzleAttachmentIndex3rdPerson, 469, (), (this))
+		VIRTUAL_METHOD(float, getInaccuracy, 483, (), (this))
+		VIRTUAL_METHOD(void, updateInaccuracyPenalty, 484, (), (this))
 
-	Entity *getObserverTarget() noexcept
+		Entity* getObserverTarget() noexcept
 	{
-		Entity *entity = VirtualMethod::call<Entity *, 295>(this);
+		Entity* entity = VirtualMethod::call<Entity*, 295>(this);
 		if (entity)
 			return entity->isPlayer() ? entity : nullptr;
 		return nullptr;
 	}
 
-	Entity *getActiveWeapon() noexcept { return interfaces->entityList->getEntityFromHandle(activeWeapon()); }
+	Entity* getActiveWeapon() noexcept { return interfaces->entityList->getEntityFromHandle(activeWeapon()); }
 
 	Vector getEyePosition() noexcept
 	{
@@ -178,13 +178,13 @@ public:
 		return v;
 	}
 
-	UtlVector<Matrix3x4> &boneCache() noexcept { return *(UtlVector<Matrix3x4> *)((uintptr_t)this + 0x2914); }
+	UtlVector<Matrix3x4>& boneCache() noexcept { return *(UtlVector<Matrix3x4> *)((uintptr_t)this + 0x2914); }
 	Vector getBonePosition(int bone) noexcept { return boneCache()[bone].origin(); }
 
-	AnimLayer *animLayers() noexcept { return *reinterpret_cast<AnimLayer **>((uintptr_t)this + 0x2990); }
-	int getAnimLayerCount() noexcept { return *reinterpret_cast<int *>((uintptr_t)this + 0x299C); }
+	AnimLayer* animLayers() noexcept { return *reinterpret_cast<AnimLayer**>((uintptr_t)this + 0x2990); }
+	int getAnimLayerCount() noexcept { return *reinterpret_cast<int*>((uintptr_t)this + 0x299C); }
 
-	std::array<float, PoseParam_Count> &poseParams() noexcept
+	std::array<float, PoseParam_Count>& poseParams() noexcept
 	{
 		return *reinterpret_cast<std::array<float, PoseParam_Count> *>((uintptr_t)this + netvars->operator[](fnv::hash("CBaseAnimating->m_flPoseParameter")));
 	}
@@ -213,11 +213,11 @@ public:
 		return false;
 	}
 
-	bool setupBones(Matrix3x4 *out, int maxBones, int boneMask, float currentTime) noexcept
+	bool setupBones(Matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
 	{
 		if (config->misc.fixBoneMatrices && this == localPlayer.get())
 		{
-			int *render = reinterpret_cast<int *>(this + 0x274);
+			int* render = reinterpret_cast<int*>(this + 0x274);
 			int backupRender = *render;
 			int backupEffects = effectFlags();
 			int backupShouldSkipFrame = shouldSkipFrame();
@@ -235,7 +235,7 @@ public:
 		}
 		if (config->misc.fixBoneMatrices)
 		{
-			int *render = reinterpret_cast<int *>(this + 0x274);
+			int* render = reinterpret_cast<int*>(this + 0x274);
 			int backup = *render;
 			Vector absOrigin = getAbsOrigin();
 			*render = 0;
@@ -249,7 +249,7 @@ public:
 		return VirtualMethod::call<bool, 13>(this + 4, out, maxBones, boneMask, currentTime);
 	}
 
-	StudioHitboxSet *getHitboxSet()
+	StudioHitboxSet* getHitboxSet()
 	{
 		const auto model = getModel();
 		if (!model) return nullptr;
@@ -257,20 +257,20 @@ public:
 		if (!studioModel) return nullptr;
 		return studioModel->getHitboxSet(hitboxSet());
 	}
-	StudioBbox *getHitbox(int i)
+	StudioBbox* getHitbox(int i)
 	{
 		const auto set = getHitboxSet();
 		if (!set) return nullptr;
 		return set->getHitbox(i);
 	}
 
-	bool isOtherEnemy(Entity *other) noexcept;
+	bool isOtherEnemy(Entity* other) noexcept;
 
-	VarMap *getVarMap() noexcept { return reinterpret_cast<VarMap *>(this + 0x24); }
+	VarMap* getVarMap() noexcept { return reinterpret_cast<VarMap*>(this + 0x24); }
 
-	int isChokingPackets() noexcept { return simulationTime() == oldSimulationTime(); };
+	int isChokingPackets() noexcept { return simulationTime() == oldSimulationTime(); }; // Probably completely wrong
 
-	bool trackLbyUpdate(float &nextUpdate) noexcept
+	bool trackLbyUpdate(float& nextUpdate) noexcept
 	{
 		if (!isPlayer())
 			return false;
@@ -329,130 +329,130 @@ public:
 		return name;
 	}
 
-	bool canSee(Entity *other, const Vector &pos) noexcept;
-	bool visibleTo(Entity *other) noexcept;
+	bool canSee(Entity* other, const Vector& pos) noexcept;
+	bool visibleTo(Entity* other) noexcept;
 
-	bool grenadeExploded() noexcept { return *reinterpret_cast<bool *>(this + 0x29E8); }
+	bool grenadeExploded() noexcept { return *reinterpret_cast<bool*>(this + 0x29E8); }
 
 	bool isFlashed() noexcept { return flashDuration() > 75.0f; }
 
-	int &effectFlags() noexcept { return *reinterpret_cast<int *>(this + 0xF0); }
+	int& effectFlags() noexcept { return *reinterpret_cast<int*>(this + 0xF0); }
 
-	int &shouldSkipFrame() noexcept { return *reinterpret_cast<int *>(this + 0xA68); }
+	int& shouldSkipFrame() noexcept { return *reinterpret_cast<int*>(this + 0xA68); }
 
 	NETVAR(clientAnimations, "CBaseAnimating", "m_bClientSideAnimation", bool)
-	NETVAR(body, "CBaseAnimating", "m_nBody", int)
-	NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
-	NETVAR(frozen, "CBaseAnimating", "m_flFrozen", float)
-	NETVAR_OFFSET(useFastPipeline, "CBaseAnimating", "m_flFrozen", 4, bool)
+		NETVAR(body, "CBaseAnimating", "m_nBody", int)
+		NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
+		NETVAR(frozen, "CBaseAnimating", "m_flFrozen", float)
+		NETVAR_OFFSET(useFastPipeline, "CBaseAnimating", "m_flFrozen", 4, bool)
 
-	NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned)
-	NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector)
-	NETVAR(rotation, "CBaseEntity", "m_angRotation", Vector)
-	NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType)
-	NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float)
-	NETVAR_OFFSET(oldSimulationTime, "CBaseEntity", "m_flSimulationTime", 4, float)
-	NETVAR(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int)
-	NETVAR(team, "CBaseEntity", "m_iTeamNum", Team)
-	NETVAR(spotted, "CBaseEntity", "m_bSpotted", bool)
+		NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned)
+		NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector)
+		NETVAR(rotation, "CBaseEntity", "m_angRotation", Vector)
+		NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType)
+		NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float)
+		NETVAR_OFFSET(oldSimulationTime, "CBaseEntity", "m_flSimulationTime", 4, float)
+		NETVAR(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int)
+		NETVAR(team, "CBaseEntity", "m_iTeamNum", Team)
+		NETVAR(spotted, "CBaseEntity", "m_bSpotted", bool)
 
-	NETVAR(activeWeapon, "CBaseCombatCharacter", "m_hActiveWeapon", int)
-	NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[64])
-	PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int)
-	NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float)
+		NETVAR(activeWeapon, "CBaseCombatCharacter", "m_hActiveWeapon", int)
+		NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[64])
+		PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int)
+		NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float)
 
-	NETVAR(viewModel, "CBasePlayer", "m_hViewModel[0]", int)
-	NETVAR(fov, "CBasePlayer", "m_iFOV", int)
-	NETVAR(fovStart, "CBasePlayer", "m_iFOVStart", int)
-	NETVAR(defaultFov, "CBasePlayer", "m_iDefaultFOV", int)
-	NETVAR(flags, "CBasePlayer", "m_fFlags", int)
-	NETVAR(viewOffset, "CBasePlayer", "m_vecViewOffset[0]", Vector)
-	NETVAR(tickBase, "CBasePlayer", "m_nTickBase", int)
-	NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector)
-	NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector)
-	NETVAR(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector)
-	NETVAR(observerMode, "CBasePlayer", "m_iObserverMode", ObsMode)
-	NETVAR(lastPlaceName, "CBasePlayer", "m_szLastPlaceName", char[18])
-	NETVAR_OFFSET(thirdPersonAngles, "CBasePlayer", "deadflag", 4, Vector)
+		NETVAR(viewModel, "CBasePlayer", "m_hViewModel[0]", int)
+		NETVAR(fov, "CBasePlayer", "m_iFOV", int)
+		NETVAR(fovStart, "CBasePlayer", "m_iFOVStart", int)
+		NETVAR(defaultFov, "CBasePlayer", "m_iDefaultFOV", int)
+		NETVAR(flags, "CBasePlayer", "m_fFlags", int)
+		NETVAR(viewOffset, "CBasePlayer", "m_vecViewOffset[0]", Vector)
+		NETVAR(tickBase, "CBasePlayer", "m_nTickBase", int)
+		NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector)
+		NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector)
+		NETVAR(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector)
+		NETVAR(observerMode, "CBasePlayer", "m_iObserverMode", ObsMode)
+		NETVAR(lastPlaceName, "CBasePlayer", "m_szLastPlaceName", char[18])
+		NETVAR_OFFSET(thirdPersonAngles, "CBasePlayer", "deadflag", 4, Vector)
 
-	NETVAR(armor, "CCSPlayer", "m_ArmorValue", int)
-	NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector)
-	NETVAR_OFFSET(animState, "CCSPlayer", "m_bIsScoped", -20, AnimState *)
-	NETVAR(isScoped, "CCSPlayer", "m_bIsScoped", bool)
-	NETVAR_OFFSET(spawnTime, "CCSPlayer", "m_iAddonBits", -4, float)
-	NETVAR(isDefusing, "CCSPlayer", "m_bIsDefusing", bool)
-	NETVAR_OFFSET(flashDuration, "CCSPlayer", "m_flFlashMaxAlpha", -8, float)
-	NETVAR(flashMaxAlpha, "CCSPlayer", "m_flFlashMaxAlpha", float)
-	NETVAR(gunGameImmunity, "CCSPlayer", "m_bGunGameImmunity", bool)
-	NETVAR(account, "CCSPlayer", "m_iAccount", int)
-	NETVAR(inBombZone, "CCSPlayer", "m_bInBombZone", bool)
-	NETVAR(hasDefuser, "CCSPlayer", "m_bHasDefuser", bool)
-	NETVAR(hasHelmet, "CCSPlayer", "m_bHasHelmet", bool)
-	NETVAR(lbyTarget, "CCSPlayer", "m_flLowerBodyYawTarget", float)
-	NETVAR(ragdoll, "CCSPlayer", "m_hRagdoll", int)
-	NETVAR(shotsFired, "CCSPlayer", "m_iShotsFired", int)
-	NETVAR(waitForNoAttack, "CCSPlayer", "m_bWaitForNoAttack", bool)
+		NETVAR(armor, "CCSPlayer", "m_ArmorValue", int)
+		NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector)
+		NETVAR_OFFSET(animState, "CCSPlayer", "m_bIsScoped", -20, AnimState*)
+		NETVAR(isScoped, "CCSPlayer", "m_bIsScoped", bool)
+		NETVAR_OFFSET(spawnTime, "CCSPlayer", "m_iAddonBits", -4, float)
+		NETVAR(isDefusing, "CCSPlayer", "m_bIsDefusing", bool)
+		NETVAR_OFFSET(flashDuration, "CCSPlayer", "m_flFlashMaxAlpha", -8, float)
+		NETVAR(flashMaxAlpha, "CCSPlayer", "m_flFlashMaxAlpha", float)
+		NETVAR(gunGameImmunity, "CCSPlayer", "m_bGunGameImmunity", bool)
+		NETVAR(account, "CCSPlayer", "m_iAccount", int)
+		NETVAR(inBombZone, "CCSPlayer", "m_bInBombZone", bool)
+		NETVAR(hasDefuser, "CCSPlayer", "m_bHasDefuser", bool)
+		NETVAR(hasHelmet, "CCSPlayer", "m_bHasHelmet", bool)
+		NETVAR(lbyTarget, "CCSPlayer", "m_flLowerBodyYawTarget", float)
+		NETVAR(ragdoll, "CCSPlayer", "m_hRagdoll", int)
+		NETVAR(shotsFired, "CCSPlayer", "m_iShotsFired", int)
+		NETVAR(waitForNoAttack, "CCSPlayer", "m_bWaitForNoAttack", bool)
 
-	NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int)
-	NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int)
-	NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int)
-	NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int)
-	NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int)
-	NETVAR_OFFSET(isInReload, "CBaseCombatWeapon", "m_iClip1", 65, bool)
-	NETVAR(reserveAmmoCount, "CBaseCombatWeapon", "m_iPrimaryReserveAmmoCount", int)
-	NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)
-	NETVAR(nextSecondaryAttack, "CBaseCombatWeapon", "m_flNextSecondaryAttack", float)
+		NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int)
+		NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int)
+		NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int)
+		NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int)
+		NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int)
+		NETVAR_OFFSET(isInReload, "CBaseCombatWeapon", "m_iClip1", 65, bool)
+		NETVAR(reserveAmmoCount, "CBaseCombatWeapon", "m_iPrimaryReserveAmmoCount", int)
+		NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)
+		NETVAR(nextSecondaryAttack, "CBaseCombatWeapon", "m_flNextSecondaryAttack", float)
 
-	NETVAR(lastShotTime, "CWeaponCSBase", "m_fLastShotTime", float)
-	NETVAR(burstMode, "CWeaponCSBase", "m_bBurstMode", bool)
-	NETVAR(postponeFireReadyTime, "CWeaponCSBase", "m_flPostponeFireReadyTime", float)
+		NETVAR(lastShotTime, "CWeaponCSBase", "m_fLastShotTime", float)
+		NETVAR(burstMode, "CWeaponCSBase", "m_bBurstMode", bool)
+		NETVAR(postponeFireReadyTime, "CWeaponCSBase", "m_flPostponeFireReadyTime", float)
 
-	NETVAR(burstShotsRemaining, "CWeaponCSBaseGun", "m_iBurstShotsRemaining", int)
-	NETVAR_OFFSET(nextBurstShot, "CWeaponCSBaseGun", "m_iBurstShotsRemaining", 4, float)
+		NETVAR(burstShotsRemaining, "CWeaponCSBaseGun", "m_iBurstShotsRemaining", int)
+		NETVAR_OFFSET(nextBurstShot, "CWeaponCSBaseGun", "m_iBurstShotsRemaining", 4, float)
 
-	NETVAR(accountID, "CBaseAttributableItem", "m_iAccountID", int)
-	NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", short)
-	NETVAR(itemDefinitionIndex2, "CBaseAttributableItem", "m_iItemDefinitionIndex", WeaponId)
-	NETVAR(itemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", int)
-	NETVAR(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int)
-	NETVAR(customName, "CBaseAttributableItem", "m_szCustomName", char[32])
-	NETVAR(fallbackPaintKit, "CBaseAttributableItem", "m_nFallbackPaintKit", unsigned)
-	NETVAR(fallbackSeed, "CBaseAttributableItem", "m_nFallbackSeed", unsigned)
-	NETVAR(fallbackWear, "CBaseAttributableItem", "m_flFallbackWear", float)
-	NETVAR(fallbackStatTrak, "CBaseAttributableItem", "m_nFallbackStatTrak", unsigned)
-	NETVAR(initialized, "CBaseAttributableItem", "m_bInitialized", bool)
+		NETVAR(accountID, "CBaseAttributableItem", "m_iAccountID", int)
+		NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", short)
+		NETVAR(itemDefinitionIndex2, "CBaseAttributableItem", "m_iItemDefinitionIndex", WeaponId)
+		NETVAR(itemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", int)
+		NETVAR(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int)
+		NETVAR(customName, "CBaseAttributableItem", "m_szCustomName", char[32])
+		NETVAR(fallbackPaintKit, "CBaseAttributableItem", "m_nFallbackPaintKit", unsigned)
+		NETVAR(fallbackSeed, "CBaseAttributableItem", "m_nFallbackSeed", unsigned)
+		NETVAR(fallbackWear, "CBaseAttributableItem", "m_flFallbackWear", float)
+		NETVAR(fallbackStatTrak, "CBaseAttributableItem", "m_nFallbackStatTrak", unsigned)
+		NETVAR(initialized, "CBaseAttributableItem", "m_bInitialized", bool)
 
-	NETVAR(owner, "CBaseViewModel", "m_hOwner", int)
-	NETVAR(weapon, "CBaseViewModel", "m_hWeapon", int)
+		NETVAR(owner, "CBaseViewModel", "m_hOwner", int)
+		NETVAR(weapon, "CBaseViewModel", "m_hWeapon", int)
 
-	NETVAR(c4StartedArming, "CC4", "m_bStartedArming", bool)
+		NETVAR(c4StartedArming, "CC4", "m_bStartedArming", bool)
 
-	NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float)
-	NETVAR(c4TimerLength, "CPlantedC4", "m_flTimerLength", float)
-	NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int)
-	NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool)
-	NETVAR(c4DefuseCountDown, "CPlantedC4", "m_flDefuseCountDown", float)
-	NETVAR(c4DefuseLength, "CPlantedC4", "m_flDefuseLength", float)
-	NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int)
+		NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float)
+		NETVAR(c4TimerLength, "CPlantedC4", "m_flTimerLength", float)
+		NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int)
+		NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool)
+		NETVAR(c4DefuseCountDown, "CPlantedC4", "m_flDefuseCountDown", float)
+		NETVAR(c4DefuseLength, "CPlantedC4", "m_flDefuseLength", float)
+		NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int)
 
-	NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool)
+		NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool)
 
-	NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
+		NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
 
-	NETVAR(thrower, "CBaseGrenade", "m_hThrower", int)
-	NETVAR(pinPulled, "CBaseCSGrenade", "m_bPinPulled", bool)
-	NETVAR(throwTime, "CBaseCSGrenade", "m_fThrowTime", float)
+		NETVAR(thrower, "CBaseGrenade", "m_hThrower", int)
+		NETVAR(pinPulled, "CBaseCSGrenade", "m_bPinPulled", bool)
+		NETVAR(throwTime, "CBaseCSGrenade", "m_fThrowTime", float)
 
-	NETVAR(didSmokeEffect, "CSmokeGrenadeProjectile", "m_bDidSmokeEffect", bool)
+		NETVAR(didSmokeEffect, "CSmokeGrenadeProjectile", "m_bDidSmokeEffect", bool)
 
-	NETVAR(mapHasBombTarget, "CCSGameRulesProxy", "m_bMapHasBombTarget", bool)
-	NETVAR(freezePeriod, "CCSGameRulesProxy", "m_bFreezePeriod", bool)
+		NETVAR(mapHasBombTarget, "CCSGameRulesProxy", "m_bMapHasBombTarget", bool)
+		NETVAR(freezePeriod, "CCSGameRulesProxy", "m_bFreezePeriod", bool)
 
-	NETVAR(fireXDelta, "CInferno", "m_fireXDelta", int[100])
-	NETVAR(fireYDelta, "CInferno", "m_fireYDelta", int[100])
-	NETVAR(fireZDelta, "CInferno", "m_fireZDelta", int[100])
-	NETVAR(fireIsBurning, "CInferno", "m_bFireIsBurning", bool[100])
-	NETVAR(fireCount, "CInferno", "m_fireCount", int)
+		NETVAR(fireXDelta, "CInferno", "m_fireXDelta", int[100])
+		NETVAR(fireYDelta, "CInferno", "m_fireYDelta", int[100])
+		NETVAR(fireZDelta, "CInferno", "m_fireZDelta", int[100])
+		NETVAR(fireIsBurning, "CInferno", "m_bFireIsBurning", bool[100])
+		NETVAR(fireCount, "CInferno", "m_fireCount", int)
 };
 
 static_assert(sizeof(Entity) == 1);

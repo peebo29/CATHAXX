@@ -14,14 +14,15 @@
 #include "../SDK/Engine.h"
 #include "../SDK/Entity.h"
 #include "../SDK/GlobalVars.h"
+#include "NEPS/Players.h"
 
 #include <limits>
 #include <tuple>
 #include <sstream>
 
-static constexpr auto operator-(float sub, const std::array<float, 3> &a) noexcept
+static constexpr auto operator-(float sub, const std::array<float, 3>& a) noexcept
 {
-	return Vector{sub - a[0], sub - a[1], sub - a[2]};
+	return Vector{ sub - a[0], sub - a[1], sub - a[2] };
 }
 
 struct BoundingBox
@@ -32,7 +33,7 @@ public:
 	ImVec2 min, max;
 	std::array<ImVec2, 8> vertices;
 
-	BoundingBox(const Vector &mins, const Vector &maxs, const std::array<float, 3> &scale, const Matrix3x4 *matrix = nullptr) noexcept
+	BoundingBox(const Vector& mins, const Vector& maxs, const std::array<float, 3>& scale, const Matrix3x4* matrix = nullptr) noexcept
 	{
 		min.y = min.x = std::numeric_limits<float>::max();
 		max.y = max.x = -std::numeric_limits<float>::max();
@@ -42,9 +43,9 @@ public:
 
 		for (int i = 0; i < 8; ++i)
 		{
-			const Vector point{i & 1 ? scaledMaxs.x : scaledMins.x,
+			const Vector point{ i & 1 ? scaledMaxs.x : scaledMins.x,
 								i & 2 ? scaledMaxs.y : scaledMins.y,
-								i & 4 ? scaledMaxs.z : scaledMins.z};
+								i & 4 ? scaledMaxs.z : scaledMins.z };
 
 			if (!Helpers::worldToScreen(matrix ? point.transform(*matrix) : point, vertices[i]))
 			{
@@ -60,8 +61,8 @@ public:
 		valid = true;
 	}
 
-	BoundingBox(const BaseData &data, const std::array<float, 3> &scale) noexcept : BoundingBox{data.obbMins, data.obbMaxs, scale, &data.coordinateFrame} {}
-	BoundingBox(const Vector &center) noexcept : BoundingBox{center - 2.0f, center + 2.0f, { 0.25f, 0.25f, 0.25f }} {}
+	BoundingBox(const BaseData& data, const std::array<float, 3>& scale) noexcept : BoundingBox{ data.obbMins, data.obbMaxs, scale, &data.coordinateFrame } {}
+	BoundingBox(const Vector& center) noexcept : BoundingBox{ center - 2.0f, center + 2.0f, { 0.25f, 0.25f, 0.25f } } {}
 
 	operator bool() const noexcept
 	{
@@ -77,18 +78,18 @@ static std::vector<ImVec2> convexHull(std::vector<ImVec2> points) noexcept
 	if (points.size() < 3)
 		return {};
 
-	std::swap(points[0], *std::min_element(points.begin(), points.end(), [](const auto &a, const auto &b) { return (a.x < b.x || (a.x == b.x && a.y < b.y)); }));
+	std::swap(points[0], *std::min_element(points.begin(), points.end(), [](const auto& a, const auto& b) { return (a.x < b.x || (a.x == b.x && a.y < b.y)); }));
 
-	constexpr auto orientation = [](const ImVec2 &a, const ImVec2 &b, const ImVec2 &c)
+	constexpr auto orientation = [](const ImVec2& a, const ImVec2& b, const ImVec2& c)
 	{
 		return (b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y);
 	};
 
-	std::sort(points.begin() + 1, points.end(), [&](const auto &a, const auto &b) { return orientation(points[0], a, b) > 0.0f; });
+	std::sort(points.begin() + 1, points.end(), [&](const auto& a, const auto& b) { return orientation(points[0], a, b) > 0.0f; });
 
 	std::vector<ImVec2> hull;
 
-	for (const auto &p : points)
+	for (const auto& p : points)
 	{
 		while (hull.size() >= 2 && orientation(hull[hull.size() - 2], hull[hull.size() - 1], p) < 0.0f)
 			hull.pop_back();
@@ -113,8 +114,8 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
 	if (!config.enabled)
 		return;
 
-    const ImU32 color = Helpers::calculateColor(config);
-    const ImU32 fillColor = Helpers::calculateColor(config.secondaryColor);
+	const ImU32 color = Helpers::calculateColor(config);
+	const ImU32 fillColor = Helpers::calculateColor(config.secondaryColor);
 
 	switch (config.type)
 	{
@@ -122,7 +123,7 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
 		switch (config.secondary)
 		{
 		case Box::Fill:
-			drawList->AddRectFilled(bbox.min + ImVec2{1.0f, 1.0f}, bbox.max - ImVec2{1.0f, 1.0f}, fillColor, config.rounding, ImDrawCornerFlags_All);
+			drawList->AddRectFilled(bbox.min + ImVec2{ 1.0f, 1.0f }, bbox.max - ImVec2{ 1.0f, 1.0f }, fillColor, config.rounding, ImDrawCornerFlags_All);
 			break;
 		case Box::Outline:
 			drawList->AddRect(bbox.min, bbox.max, fillColor, config.rounding, ImDrawCornerFlags_All, 3.0f);
@@ -135,35 +136,35 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
 		switch (config.secondary)
 		{
 		case Box::Fill:
-			drawList->AddRectFilled(bbox.min + ImVec2{1.0f, 1.0f}, bbox.max - ImVec2{1.0f, 1.0f}, fillColor, config.rounding, ImDrawCornerFlags_All);
+			drawList->AddRectFilled(bbox.min + ImVec2{ 1.0f, 1.0f }, bbox.max - ImVec2{ 1.0f, 1.0f }, fillColor, config.rounding, ImDrawCornerFlags_All);
 			break;
 		case Box::Outline:
-			drawList->AddLine(bbox.min, {bbox.min.x, IM_FLOOR(bbox.min.y * 0.75f + bbox.max.y * 0.25f)}, fillColor, 3.0f);
-			drawList->AddLine(bbox.min, {IM_FLOOR(bbox.min.x * 0.75f + bbox.max.x * 0.25f), bbox.min.y}, fillColor, 3.0f);
+			drawList->AddLine(bbox.min, { bbox.min.x, IM_FLOOR(bbox.min.y * 0.75f + bbox.max.y * 0.25f) }, fillColor, 3.0f);
+			drawList->AddLine(bbox.min, { IM_FLOOR(bbox.min.x * 0.75f + bbox.max.x * 0.25f), bbox.min.y }, fillColor, 3.0f);
 
-			drawList->AddLine({bbox.max.x, bbox.min.y}, {IM_FLOOR(bbox.max.x * 0.75f + bbox.min.x * 0.25f), bbox.min.y}, fillColor, 3.0f);
-			drawList->AddLine({bbox.max.x - 1.0f, bbox.min.y}, {bbox.max.x - 1.0f, IM_FLOOR(bbox.min.y * 0.75f + bbox.max.y * 0.25f)}, fillColor, 3.0f);
+			drawList->AddLine({ bbox.max.x, bbox.min.y }, { IM_FLOOR(bbox.max.x * 0.75f + bbox.min.x * 0.25f), bbox.min.y }, fillColor, 3.0f);
+			drawList->AddLine({ bbox.max.x - 1.0f, bbox.min.y }, { bbox.max.x - 1.0f, IM_FLOOR(bbox.min.y * 0.75f + bbox.max.y * 0.25f) }, fillColor, 3.0f);
 
-			drawList->AddLine({bbox.min.x, bbox.max.y}, {bbox.min.x, IM_FLOOR(bbox.max.y * 0.75f + bbox.min.y * 0.25f)}, fillColor, 3.0f);
-			drawList->AddLine({bbox.min.x, bbox.max.y - 1.0f}, {IM_FLOOR(bbox.min.x * 0.75f + bbox.max.x * 0.25f), bbox.max.y - 1.0f}, fillColor, 3.0f);
+			drawList->AddLine({ bbox.min.x, bbox.max.y }, { bbox.min.x, IM_FLOOR(bbox.max.y * 0.75f + bbox.min.y * 0.25f) }, fillColor, 3.0f);
+			drawList->AddLine({ bbox.min.x, bbox.max.y - 1.0f }, { IM_FLOOR(bbox.min.x * 0.75f + bbox.max.x * 0.25f), bbox.max.y - 1.0f }, fillColor, 3.0f);
 
-			drawList->AddLine(bbox.max - ImVec2{0.5f, 1.0f}, {IM_FLOOR(bbox.max.x * 0.75f + bbox.min.x * 0.25f), bbox.max.y - 1.0f}, fillColor, 3.0f);
-			drawList->AddLine(bbox.max - ImVec2{1.0f, 0.0f}, {bbox.max.x - 1.0f, IM_FLOOR(bbox.max.y * 0.75f + bbox.min.y * 0.25f)}, fillColor, 3.0f);
+			drawList->AddLine(bbox.max - ImVec2{ 0.5f, 1.0f }, { IM_FLOOR(bbox.max.x * 0.75f + bbox.min.x * 0.25f), bbox.max.y - 1.0f }, fillColor, 3.0f);
+			drawList->AddLine(bbox.max - ImVec2{ 1.0f, 0.0f }, { bbox.max.x - 1.0f, IM_FLOOR(bbox.max.y * 0.75f + bbox.min.y * 0.25f) }, fillColor, 3.0f);
 			break;
 		}
 
 		{
-			drawList->AddLine(bbox.min, {bbox.min.x, IM_FLOOR(bbox.min.y * 0.75f + bbox.max.y * 0.25f)}, color);
-			drawList->AddLine(bbox.min, {IM_FLOOR(bbox.min.x * 0.75f + bbox.max.x * 0.25f), bbox.min.y}, color);
+			drawList->AddLine(bbox.min, { bbox.min.x, IM_FLOOR(bbox.min.y * 0.75f + bbox.max.y * 0.25f) }, color);
+			drawList->AddLine(bbox.min, { IM_FLOOR(bbox.min.x * 0.75f + bbox.max.x * 0.25f), bbox.min.y }, color);
 
-			drawList->AddLine({bbox.max.x, bbox.min.y}, {IM_FLOOR(bbox.max.x * 0.75f + bbox.min.x * 0.25f), bbox.min.y}, color);
-			drawList->AddLine({bbox.max.x - 1.0f, bbox.min.y}, {bbox.max.x - 1.0f, IM_FLOOR(bbox.min.y * 0.75f + bbox.max.y * 0.25f)}, color);
+			drawList->AddLine({ bbox.max.x, bbox.min.y }, { IM_FLOOR(bbox.max.x * 0.75f + bbox.min.x * 0.25f), bbox.min.y }, color);
+			drawList->AddLine({ bbox.max.x - 1.0f, bbox.min.y }, { bbox.max.x - 1.0f, IM_FLOOR(bbox.min.y * 0.75f + bbox.max.y * 0.25f) }, color);
 
-			drawList->AddLine({bbox.min.x, bbox.max.y}, {bbox.min.x, IM_FLOOR(bbox.max.y * 0.75f + bbox.min.y * 0.25f)}, color);
-			drawList->AddLine({bbox.min.x, bbox.max.y - 1.0f}, {IM_FLOOR(bbox.min.x * 0.75f + bbox.max.x * 0.25f), bbox.max.y - 1.0f}, color);
+			drawList->AddLine({ bbox.min.x, bbox.max.y }, { bbox.min.x, IM_FLOOR(bbox.max.y * 0.75f + bbox.min.y * 0.25f) }, color);
+			drawList->AddLine({ bbox.min.x, bbox.max.y - 1.0f }, { IM_FLOOR(bbox.min.x * 0.75f + bbox.max.x * 0.25f), bbox.max.y - 1.0f }, color);
 
-			drawList->AddLine(bbox.max - ImVec2{0.5f, 1.0f}, {IM_FLOOR(bbox.max.x * 0.75f + bbox.min.x * 0.25f), bbox.max.y - 1.0f}, color);
-			drawList->AddLine(bbox.max - ImVec2{1.0f, 0.0f}, {bbox.max.x - 1.0f, IM_FLOOR(bbox.max.y * 0.75f + bbox.min.y * 0.25f)}, color);
+			drawList->AddLine(bbox.max - ImVec2{ 0.5f, 1.0f }, { IM_FLOOR(bbox.max.x * 0.75f + bbox.min.x * 0.25f), bbox.max.y - 1.0f }, color);
+			drawList->AddLine(bbox.max - ImVec2{ 1.0f, 0.0f }, { bbox.max.x - 1.0f, IM_FLOOR(bbox.max.y * 0.75f + bbox.min.y * 0.25f) }, color);
 		}
 		break;
 	case Box::_3d:
@@ -171,7 +172,7 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
 		{
 		case Box::Fill:
 		{
-			const auto hull = convexHull({std::begin(bbox.vertices), std::end(bbox.vertices)});
+			const auto hull = convexHull({ std::begin(bbox.vertices), std::end(bbox.vertices) });
 			drawList->AddConvexPolyFilled(hull.data(), hull.size(), fillColor);
 			break;
 		}
@@ -201,7 +202,7 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
 		{
 		case Box::Fill:
 		{
-			const auto hull = convexHull({std::begin(bbox.vertices), std::end(bbox.vertices)});
+			const auto hull = convexHull({ std::begin(bbox.vertices), std::end(bbox.vertices) });
 			drawList->AddConvexPolyFilled(hull.data(), hull.size(), fillColor);
 			break;
 		}
@@ -212,8 +213,8 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
 				{
 					if (!(i & j))
 					{
-						drawList->AddLine(bbox.vertices[i], ImVec2{bbox.vertices[i].x * 0.75f + bbox.vertices[i + j].x * 0.25f, bbox.vertices[i].y * 0.75f + bbox.vertices[i + j].y * 0.25f}, fillColor, 3.0f);
-						drawList->AddLine(ImVec2{bbox.vertices[i].x * 0.25f + bbox.vertices[i + j].x * 0.75f, bbox.vertices[i].y * 0.25f + bbox.vertices[i + j].y * 0.75f}, bbox.vertices[i + j], fillColor, 3.0f);
+						drawList->AddLine(bbox.vertices[i], ImVec2{ bbox.vertices[i].x * 0.75f + bbox.vertices[i + j].x * 0.25f, bbox.vertices[i].y * 0.75f + bbox.vertices[i + j].y * 0.25f }, fillColor, 3.0f);
+						drawList->AddLine(ImVec2{ bbox.vertices[i].x * 0.25f + bbox.vertices[i + j].x * 0.75f, bbox.vertices[i].y * 0.25f + bbox.vertices[i + j].y * 0.75f }, bbox.vertices[i + j], fillColor, 3.0f);
 					}
 				}
 			}
@@ -226,8 +227,8 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
 			{
 				if (!(i & j))
 				{
-					drawList->AddLine(bbox.vertices[i], {bbox.vertices[i].x * 0.75f + bbox.vertices[i + j].x * 0.25f, bbox.vertices[i].y * 0.75f + bbox.vertices[i + j].y * 0.25f}, color);
-					drawList->AddLine({bbox.vertices[i].x * 0.25f + bbox.vertices[i + j].x * 0.75f, bbox.vertices[i].y * 0.25f + bbox.vertices[i + j].y * 0.75f}, bbox.vertices[i + j], color);
+					drawList->AddLine(bbox.vertices[i], { bbox.vertices[i].x * 0.75f + bbox.vertices[i + j].x * 0.25f, bbox.vertices[i].y * 0.75f + bbox.vertices[i + j].y * 0.25f }, color);
+					drawList->AddLine({ bbox.vertices[i].x * 0.25f + bbox.vertices[i + j].x * 0.75f, bbox.vertices[i].y * 0.25f + bbox.vertices[i + j].y * 0.75f }, bbox.vertices[i + j], color);
 				}
 			}
 		}
@@ -235,12 +236,12 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
 	}
 }
 
-static void drawSnapline(const Snapline &config, const ImVec2 &min, const ImVec2 &max) noexcept
+static void drawSnapline(const Snapline& config, const ImVec2& min, const ImVec2& max) noexcept
 {
 	if (!config.enabled)
 		return;
 
-	const auto &screenSize = ImGui::GetIO().DisplaySize;
+	const auto& screenSize = ImGui::GetIO().DisplaySize;
 
 	ImVec2 p1, p2;
 	p1.x = screenSize.x / 2;
@@ -269,7 +270,7 @@ static void drawSnapline(const Snapline &config, const ImVec2 &min, const ImVec2
 
 struct FontPush
 {
-	FontPush(const std::string &name)
+	FontPush(const std::string& name)
 	{
 		if (const auto it = config->getFonts().find(name); it != config->getFonts().end())
 			ImGui::PushFont(it->second.font);
@@ -283,26 +284,27 @@ struct FontPush
 	}
 };
 
-static void drawHealthBar(const ImVec2 &pos, float height, int health, const Color4OutlineToggle &healthBarConfig, const Color4OutlineToggle &text, float distance, float cull) noexcept
+static void drawHealthBar(const ImVec2& pos, float height, int health, const Color4OutlineToggle& healthBarConfig, const Color4OutlineToggle& text, float distance, float cull) noexcept
 {
 	constexpr float width = 3.0f;
 
 	if (healthBarConfig.enabled)
 	{
-		const auto textPos = ImGuiCustom::drawProgressBar(drawList, static_cast<float>(health) / 100, pos, ImVec2{width, height}, healthBarConfig.outline, true, healthBarConfig, true, false);
+		const auto textPos = ImGuiCustom::drawProgressBar(drawList, static_cast<float>(health) / 100, pos, ImVec2{ width, height }, healthBarConfig.outline, true, healthBarConfig, true, false);
 
 		if (text.enabled && !cullText(distance, cull))
 			ImGuiCustom::drawText(drawList, std::to_string(health).c_str(), textPos, text, text.outline, true, false);
-	} else if (text.enabled && !cullText(distance, cull))
-		ImGuiCustom::drawText(drawList, std::to_string(health).c_str(), pos + ImVec2{width / 2, 0}, text, text.outline, true, false);
+	}
+	else if (text.enabled && !cullText(distance, cull))
+		ImGuiCustom::drawText(drawList, std::to_string(health).c_str(), pos + ImVec2{ width / 2, 0 }, text, text.outline, true, false);
 }
 
-static void renderPlayerBox(const PlayerData &playerData, const Player &config) noexcept
+static void renderPlayerBox(const PlayerData& playerData, const Player& config) noexcept
 {
 	if (!playerData.inViewFrustum)
 		return;
 
-	const BoundingBox bbox = {playerData, config.box.scale};
+	const BoundingBox bbox = { playerData, config.box.scale };
 
 	if (!bbox)
 		return;
@@ -311,24 +313,19 @@ static void renderPlayerBox(const PlayerData &playerData, const Player &config) 
 
 	ImVec2 offsetMins{}, offsetMaxs{};
 
-	FontPush font{config.font.name};
+	FontPush font{ config.font.name };
 
-	drawHealthBar(bbox.min - ImVec2{5.0f, 0.0f}, (bbox.max.y - bbox.min.y), playerData.health, config.healthBar, config.health, playerData.distanceToLocal, config.textCullDistance);
+	drawHealthBar(bbox.min - ImVec2{ 5.0f, 0.0f }, (bbox.max.y - bbox.min.y), playerData.health, config.healthBar, config.health, playerData.distanceToLocal, config.textCullDistance);
 
 	if (config.name.enabled && !cullText(playerData.distanceToLocal, config.textCullDistance))
 	{
-		const auto nameSize = ImGuiCustom::drawText(drawList, playerData.name.c_str(), {(bbox.min.x + bbox.max.x) * 0.5f, bbox.min.y}, config.name, config.name.outline);
+		const auto nameSize = ImGuiCustom::drawText(drawList, playerData.name.c_str(), { (bbox.min.x + bbox.max.x) * 0.5f, bbox.min.y }, config.name, config.name.outline);
 		offsetMins.y -= nameSize.y;
 	}
 
 	if (config.flags.enabled)
 	{
 		std::ostringstream flags;
-
-		#ifdef NEPS_DEBUG
-		if (playerData.chokedPackets)
-			flags << "CHK " << playerData.chokedPackets << "\n";
-		#endif // NEPS_DEBUG
 
 		if (playerData.isBot)
 			flags << "BOT\n";
@@ -346,13 +343,13 @@ static void renderPlayerBox(const PlayerData &playerData, const Player &config) 
 			flags << "AMR " << playerData.armor << "\n";
 
 		if (!flags.str().empty() && !cullText(playerData.distanceToLocal, config.textCullDistance))
-			ImGuiCustom::drawText(drawList, flags.str().c_str(), {bbox.max.x + 1.0f, bbox.min.y}, config.flags, config.flags.outline, false, false);
+			ImGuiCustom::drawText(drawList, flags.str().c_str(), { bbox.max.x + 1.0f, bbox.min.y }, config.flags, config.flags.outline, false, false);
 	}
 
 	if (config.flashDuration.enabled && playerData.flashDuration > 0.0f)
 	{
 		const auto radius = std::max(6.0f - playerData.distanceToLocal / 600.0f, 2.0f);
-		ImVec2 flashDurationPos{(bbox.min.x + bbox.max.x) / 2, bbox.min.y + offsetMins.y - radius * 1.5f};
+		ImVec2 flashDurationPos{ (bbox.min.x + bbox.max.x) / 2, bbox.min.y + offsetMins.y - radius * 1.5f };
 
 		const auto color = Helpers::calculateColor(config.flashDuration);
 		constexpr float pi = std::numbers::pi_v<float>;
@@ -366,16 +363,16 @@ static void renderPlayerBox(const PlayerData &playerData, const Player &config) 
 
 	if (config.weapon.enabled && !playerData.activeWeapon.empty() && !cullText(playerData.distanceToLocal, config.textCullDistance))
 	{
-		const auto weaponTextSize = ImGuiCustom::drawText(drawList, playerData.activeWeapon.c_str(), {(bbox.min.x + bbox.max.x) * 0.5f, bbox.max.y}, config.weapon, config.weapon.outline, true, false);
+		const auto weaponTextSize = ImGuiCustom::drawText(drawList, playerData.activeWeapon.c_str(), { (bbox.min.x + bbox.max.x) * 0.5f, bbox.max.y }, config.weapon, config.weapon.outline, true, false);
 		offsetMaxs.y += weaponTextSize.y;
 	}
 
 	drawSnapline(config.snapline, bbox.min + offsetMins, bbox.max + offsetMaxs);
 }
 
-static void renderWeaponBox(const WeaponData &weaponData, const Weapon &config) noexcept
+static void renderWeaponBox(const WeaponData& weaponData, const Weapon& config) noexcept
 {
-	const BoundingBox bbox{weaponData, config.box.scale};
+	const BoundingBox bbox{ weaponData, config.box.scale };
 
 	if (!bbox)
 		return;
@@ -383,21 +380,21 @@ static void renderWeaponBox(const WeaponData &weaponData, const Weapon &config) 
 	renderBox(bbox, config.box);
 	drawSnapline(config.snapline, bbox.min, bbox.max);
 
-	FontPush font{config.font.name};
+	FontPush font{ config.font.name };
 
 	if (config.name.enabled && !weaponData.displayName.empty() && !cullText(weaponData.distanceToLocal, config.textCullDistance))
-		ImGuiCustom::drawText(drawList, weaponData.displayName.c_str(), {(bbox.min.x + bbox.max.x) / 2, bbox.min.y}, config.name, config.name.outline);
+		ImGuiCustom::drawText(drawList, weaponData.displayName.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.min.y }, config.name, config.name.outline);
 
 	if (config.ammo.enabled && weaponData.clip != -1 && !cullText(weaponData.distanceToLocal, config.textCullDistance))
 	{
-		const auto text{std::to_string(weaponData.clip) + " / " + std::to_string(weaponData.reserveAmmo)};
-		ImGuiCustom::drawText(drawList, text.c_str(), {(bbox.min.x + bbox.max.x) / 2, bbox.max.y}, config.ammo, config.ammo.outline, true, false);
+		const auto text{ std::to_string(weaponData.clip) + " / " + std::to_string(weaponData.reserveAmmo) };
+		ImGuiCustom::drawText(drawList, text.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.max.y }, config.ammo, config.ammo.outline, true, false);
 	}
 }
 
-static void renderEntityBox(const BaseData &entityData, const char *name, const Shared &config) noexcept
+static void renderEntityBox(const BaseData& entityData, const char* name, const Shared& config) noexcept
 {
-	const BoundingBox bbox{entityData, config.box.scale};
+	const BoundingBox bbox{ entityData, config.box.scale };
 
 	if (!bbox)
 		return;
@@ -405,13 +402,13 @@ static void renderEntityBox(const BaseData &entityData, const char *name, const 
 	renderBox(bbox, config.box);
 	drawSnapline(config.snapline, bbox.min, bbox.max);
 
-	FontPush font{config.font.name};
+	FontPush font{ config.font.name };
 
 	if (config.name.enabled && !cullText(entityData.distanceToLocal, config.textCullDistance))
-		ImGuiCustom::drawText(drawList, name, {(bbox.min.x + bbox.max.x) / 2, bbox.min.y - 5}, config.name, config.name.outline);
+		ImGuiCustom::drawText(drawList, name, { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 5 }, config.name, config.name.outline);
 }
 
-static void drawProjectileTrajectory(const Trail &config, const std::vector<std::pair<float, Vector>> &trajectory) noexcept
+static void drawProjectileTrajectory(const Trail& config, const std::vector<std::pair<float, Vector>>& trajectory) noexcept
 {
 	if (!config.enabled)
 		return;
@@ -420,7 +417,7 @@ static void drawProjectileTrajectory(const Trail &config, const std::vector<std:
 
 	const auto color = Helpers::calculateColor(config);
 
-	for (const auto &[time, point] : trajectory)
+	for (const auto& [time, point] : trajectory)
 	{
 		if (ImVec2 pos; time + config.time >= memory->globalVars->realTime && Helpers::worldToScreen(point, pos, false))
 		{
@@ -428,12 +425,14 @@ static void drawProjectileTrajectory(const Trail &config, const std::vector<std:
 			{
 				points.emplace_back(pos);
 				shadowPoints.emplace_back(pos);
-			} else if (config.type == Trail::Circles)
+			}
+			else if (config.type == Trail::Circles)
 			{
 				if (config.outline)
 					drawList->AddCircle(pos, 4.0f - point.distTo(GameData::local().origin) / 700.0f, color & IM_COL32_A_MASK, 12, config.thickness + 2.0f);
 				drawList->AddCircle(pos, 4.0f - point.distTo(GameData::local().origin) / 700.0f, color, 12, config.thickness);
-			} else if (config.type == Trail::FilledCircles)
+			}
+			else if (config.type == Trail::FilledCircles)
 			{
 				if (config.outline)
 					drawList->AddCircleFilled(pos, 5.0f - point.distTo(GameData::local().origin) / 700.0f, color & IM_COL32_A_MASK);
@@ -450,7 +449,7 @@ static void drawProjectileTrajectory(const Trail &config, const std::vector<std:
 	}
 }
 
-static void drawPlayerSkeleton(const Color4OutlineToggleThickness &config, const PlayerData &playerData) noexcept
+static void drawPlayerSkeleton(const Color4OutlineToggleThickness& config, const PlayerData& playerData) noexcept
 {
 	if (!config.enabled)
 		return;
@@ -462,7 +461,7 @@ static void drawPlayerSkeleton(const Color4OutlineToggleThickness &config, const
 
 	std::vector<std::pair<ImVec2, ImVec2>> points, shadowPoints;
 
-	for (const auto &[bone, parent] : playerData.bones)
+	for (const auto& [bone, parent] : playerData.bones)
 	{
 		ImVec2 bonePoint;
 		if (!Helpers::worldToScreen(bone, bonePoint))
@@ -477,14 +476,14 @@ static void drawPlayerSkeleton(const Color4OutlineToggleThickness &config, const
 	}
 
 	if (config.outline)
-		for (const auto &[bonePoint, parentPoint] : shadowPoints)
+		for (const auto& [bonePoint, parentPoint] : shadowPoints)
 			drawList->AddLine(bonePoint, parentPoint, color & IM_COL32_A_MASK, config.thickness + 2.0f);
 
-	for (const auto &[bonePoint, parentPoint] : points)
+	for (const auto& [bonePoint, parentPoint] : points)
 		drawList->AddLine(bonePoint, parentPoint, color, config.thickness);
 }
 
-static void drawOffscreen(const Color4OutlineToggle &config, const PlayerData &playerData) noexcept
+static void drawOffscreen(const Color4OutlineToggle& config, const PlayerData& playerData) noexcept
 {
 	if (!config.enabled)
 		return;
@@ -498,7 +497,7 @@ static void drawOffscreen(const Color4OutlineToggle &config, const PlayerData &p
 
 	const auto sin = std::sin(yaw);
 	const auto cos = std::cos(yaw);
-	ImVec2 pos = {cos * positionDiff.y - sin * positionDiff.x, cos * positionDiff.x + sin * positionDiff.y};
+	ImVec2 pos = { cos * positionDiff.y - sin * positionDiff.x, cos * positionDiff.x + sin * positionDiff.y };
 	const auto l = std::sqrtf(ImLengthSqr(pos));
 	if (!l) return;
 	pos /= l;
@@ -507,7 +506,7 @@ static void drawOffscreen(const Color4OutlineToggle &config, const PlayerData &p
 	ImGuiCustom::drawTriangleFromCenter(drawList, pos * 300, color, config.outline);
 }
 
-static void drawLineOfSight(const Color4ToggleThickness &config, const PlayerData &playerData)
+static void drawLineOfSight(const Color4ToggleThickness& config, const PlayerData& playerData)
 {
 	if (!config.enabled)
 		return;
@@ -515,7 +514,7 @@ static void drawLineOfSight(const Color4ToggleThickness &config, const PlayerDat
 	const auto color = Helpers::calculateColor(config);
 
 	ImVec2 start, end;
-	
+
 	bool draw = Helpers::worldToScreen((playerData.headMaxs + playerData.headMins) / 2, start);
 	draw = draw && Helpers::worldToScreen(playerData.lookingAt, end);
 
@@ -526,7 +525,7 @@ static void drawLineOfSight(const Color4ToggleThickness &config, const PlayerDat
 	}
 }
 
-static void renderPlayerEsp(const PlayerData &playerData, const Player &playerConfig) noexcept
+static void renderPlayerEsp(const PlayerData& playerData, const Player& playerConfig) noexcept
 {
 	if (!playerConfig.enabled)
 		return;
@@ -547,7 +546,7 @@ static void renderPlayerEsp(const PlayerData &playerData, const Player &playerCo
 	renderPlayerBox(playerData, playerConfig);
 	drawPlayerSkeleton(playerConfig.skeleton, playerData);
 
-	if (const BoundingBox headBbox = {playerData.headMins, playerData.headMaxs, playerConfig.headBox.scale}; headBbox && playerData.inViewFrustum)
+	if (const BoundingBox headBbox = { playerData.headMins, playerData.headMaxs, playerConfig.headBox.scale }; headBbox && playerData.inViewFrustum)
 		renderBox(headBbox, playerConfig.headBox);
 
 	drawLineOfSight(playerConfig.lineOfSight, playerData);
@@ -557,29 +556,30 @@ static void renderPlayerEsp(const PlayerData &playerData, const Player &playerCo
 	return;
 }
 
-static void renderWeaponEsp(const WeaponData &weaponData, const Weapon &parentConfig, const Weapon &itemConfig) noexcept
+static void renderWeaponEsp(const WeaponData& weaponData, const Weapon& parentConfig, const Weapon& itemConfig) noexcept
 {
-	const auto &config = itemConfig.enabled ? itemConfig : (parentConfig.enabled ? parentConfig : ::config->esp.weapons["All"]);
+	const auto& config = itemConfig.enabled ? itemConfig : (parentConfig.enabled ? parentConfig : ::config->esp.weapons["All"]);
 	if (config.enabled)
 	{
 		renderWeaponBox(weaponData, config);
 	}
 }
 
-static void renderEntityEsp(const BaseData &entityData, const std::unordered_map<std::string, Shared> &map, const char *name) noexcept
+static void renderEntityEsp(const BaseData& entityData, const std::unordered_map<std::string, Shared>& map, const char* name) noexcept
 {
 	if (const auto cfg = map.find(name); cfg != map.cend() && cfg->second.enabled)
 	{
 		renderEntityBox(entityData, name, cfg->second);
-	} else if (const auto cfg = map.find("All"); cfg != map.cend() && cfg->second.enabled)
+	}
+	else if (const auto cfg = map.find("All"); cfg != map.cend() && cfg->second.enabled)
 	{
 		renderEntityBox(entityData, name, cfg->second);
 	}
 }
 
-static void renderProjectileEsp(const ProjectileData &projectileData, const Projectile &parentConfig, const Projectile &itemConfig, const char *name) noexcept
+static void renderProjectileEsp(const ProjectileData& projectileData, const Projectile& parentConfig, const Projectile& itemConfig, const char* name) noexcept
 {
-	const auto &config = itemConfig.enabled ? itemConfig : parentConfig;
+	const auto& config = itemConfig.enabled ? itemConfig : parentConfig;
 
 	if (config.enabled)
 	{
@@ -600,31 +600,34 @@ static void renderProjectileEsp(const ProjectileData &projectileData, const Proj
 
 void StreamProofESP::render() noexcept
 {
+	if (config->players.spectatorFilter && config->players.filterESP && !Players::noSpectators)
+		return;
+
 	drawList = ImGui::GetBackgroundDrawList();
 
 	GameData::Lock lock;
 
-	for (const auto &weapon : GameData::weapons())
+	for (const auto& weapon : GameData::weapons())
 		renderWeaponEsp(weapon, config->esp.weapons[weapon.group], config->esp.weapons[weapon.name]);
 
-	for (const auto &entity : GameData::entities())
+	for (const auto& entity : GameData::entities())
 		renderEntityEsp(entity, config->esp.otherEntities, entity.name);
 
-	for (const auto &lootCrate : GameData::lootCrates())
+	for (const auto& lootCrate : GameData::lootCrates())
 	{
 		if (lootCrate.name)
 			renderEntityEsp(lootCrate, config->esp.lootCrates, lootCrate.name);
 	}
 
-	for (const auto &projectile : GameData::projectiles())
+	for (const auto& projectile : GameData::projectiles())
 		renderProjectileEsp(projectile, config->esp.projectiles["All"], config->esp.projectiles[projectile.name], projectile.name);
 
-	for (const auto &player : GameData::players())
+	for (const auto& player : GameData::players())
 	{
 		if (!player.alive) continue;
 		if (player.handle == GameData::local().observerTargetHandle) continue;
 
-		auto &playerConfig = player.enemy ? config->esp.enemies : config->esp.allies;
+		auto& playerConfig = player.enemy ? config->esp.enemies : config->esp.allies;
 
 		if (player.dormant && playerConfig["Dormant"].enabled)
 			renderPlayerEsp(player, playerConfig["Dormant"]);

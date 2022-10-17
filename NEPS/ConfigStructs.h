@@ -44,7 +44,7 @@ struct Color4Toggle : Color4
 
 struct Color4Outline : Color4
 {
-	bool outline = true;
+	bool outline = false;
 };
 
 struct Color4OutlineToggle : Color4Outline

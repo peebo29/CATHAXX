@@ -16,7 +16,7 @@
     <ProjectGuid>{f0a6be3c-9c9f-45de-b1c2-bb0be77eed04}</ProjectGuid>
     <RootNamespace>NLoader</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>MeowEngineLoader</ProjectName>
+    <ProjectName>MEOWENGINE INSTALLER</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -161,7 +161,7 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MeowEngineLoader.rc" />
+    <ResourceCompile Include="MEOWENGINE INSTALLER.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\logo.ico" />

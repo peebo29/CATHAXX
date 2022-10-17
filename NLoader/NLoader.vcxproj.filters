@@ -71,7 +71,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MeowEngineLoader.rc">
+    <ResourceCompile Include="MEOWENGINE INSTALLER.rc">
       <Filter>Resources</Filter>
     </ResourceCompile>
   </ItemGroup>

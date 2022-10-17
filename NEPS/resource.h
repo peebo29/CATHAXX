@@ -1,6 +1,6 @@
 ﻿//{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by NEPS.rc
+// Used by Meowengine
 //
 #define IDB_PNG1                        101
 #define IDB_PNG2                        102

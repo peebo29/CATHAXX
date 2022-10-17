@@ -5,12 +5,21 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\dllmain.cpp" />
     <ClCompile Include="..\shared_lib\imgui\imgui.cpp" />
     <ClCompile Include="..\shared_lib\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\shared_lib\imgui\imgui_draw.cpp" />
@@ -22,6 +31,8 @@
     <ClCompile Include="..\shared_lib\stb\stb.cpp" />
     <ClCompile Include="..\shared_lib\Texture\TextureDX9.cpp" />
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="Discord.cpp" />
     <ClCompile Include="EventListener.cpp" />
     <ClCompile Include="GameData.cpp" />
     <ClCompile Include="Hacks\Aimbot.cpp" />
@@ -51,19 +62,103 @@
     <ClCompile Include="lib\minhook\hook.c" />
     <ClCompile Include="lib\minhook\trampoline.c" />
     <ClCompile Include="Netvars.cpp" />
-    <ClCompile Include="MeowEngine.cpp" />
+    <ClCompile Include="MEOWENGINE.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Hacks\Misc.cpp" />
     <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="Players.cpp" />
     <ClCompile Include="SDK\CRC.cpp" />
     <ClCompile Include="SDK\Entity.cpp" />
     <ClCompile Include="SDK\GlobalVars.cpp" />
     <ClCompile Include="SDK\Input.cpp" />
     <ClCompile Include="SDK\KeyValues.cpp" />
     <ClCompile Include="SDK\UserCmd.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\C---Discord-RPC-master\C---Discord-RPC-master\TutDiscord\Discord SDK\src\msg_queue.h" />
+    <ClInclude Include="..\..\..\..\..\..\C---Discord-RPC-master\C---Discord-RPC-master\TutDiscord\Discord SDK\src\rpc_connection.h" />
+    <ClInclude Include="..\..\..\..\..\..\C---Discord-RPC-master\C---Discord-RPC-master\TutDiscord\Discord SDK\src\serialization.h" />
+    <ClInclude Include="..\..\..\..\..\..\discord-rpc-win (2)\discord-rpc\win64-static\include\discord_register.h" />
+    <ClInclude Include="..\..\..\..\..\..\discord-rpc-win (2)\discord-rpc\win64-static\include\discord_rpc.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\backoff.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\connection.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\msg_queue.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\allocators.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\cursorstreamwrapper.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\document.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\encodedstream.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\encodings.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\error\en.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\error\error.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\filereadstream.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\filewritestream.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\fwd.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\internal\biginteger.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\internal\diyfp.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\internal\dtoa.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\internal\ieee754.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\internal\itoa.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\internal\meta.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\internal\pow10.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\internal\regex.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\internal\stack.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\internal\strtod.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\internal\swap.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\istreamwrapper.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\memorybuffer.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\memorystream.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\msinttypes\inttypes.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\msinttypes\stdint.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\pointer.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\prettywriter.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\rapidjson.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\reader.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\schema.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\stream.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\stringbuffer.h" />
+    <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\rapidjson\writer.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\backoff.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\msg_queue.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\allocators.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\document.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\encodedstream.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\encodings.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\error\en.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\error\error.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\filereadstream.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\filewritestream.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\fwd.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\internal\biginteger.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\internal\diyfp.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\internal\dtoa.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\internal\ieee754.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\internal\itoa.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\internal\meta.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\internal\pow10.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\internal\regex.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\internal\stack.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\internal\strtod.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\internal\swap.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\istreamwrapper.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\memorybuffer.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\memorystream.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\msinttypes\inttypes.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\msinttypes\stdint.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\pointer.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\prettywriter.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\rapidjson.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\reader.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\schema.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\stream.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\stringbuffer.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\writer.h" />
+    <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\serialization.h" />
     <ClInclude Include="..\shared_lib\imgui\imconfig.h" />
     <ClInclude Include="..\shared_lib\imgui\imgui.h" />
     <ClInclude Include="..\shared_lib\imgui\imgui_impl_dx9.h" />
@@ -78,6 +173,8 @@
     <ClInclude Include="..\shared_lib\Texture\TextureDX9.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigStructs.h" />
+    <ClInclude Include="Debug.h" />
+    <ClInclude Include="Discord.hpp" />
     <ClInclude Include="EventListener.h" />
     <ClInclude Include="GameData.h" />
     <ClInclude Include="Hacks\Aimbot.h" />
@@ -95,6 +192,7 @@
     <ClInclude Include="Hooks\MinHook.h" />
     <ClInclude Include="Hooks\VmtHook.h" />
     <ClInclude Include="Hooks\VmtSwap.h" />
+    <ClInclude Include="includes.hpp" />
     <ClInclude Include="lib\fnv.hpp" />
     <ClInclude Include="lib\Helpers.hpp" />
     <ClInclude Include="lib\ImGuiCustom.hpp" />
@@ -108,6 +206,7 @@
     <ClInclude Include="lib\minhook\trampoline.h" />
     <ClInclude Include="lib\nlohmann\json.hpp" />
     <ClInclude Include="Netvars.h" />
+    <ClInclude Include="Players.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="res_defaultfont.h" />
     <ClInclude Include="SDK\AnimState.h" />
@@ -174,6 +273,7 @@
     <ClInclude Include="SDK\WeaponId.h" />
     <ClInclude Include="SDK\WeaponData.h" />
     <ClInclude Include="SDK\WeaponSystem.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\..\..\..\Pictures\RJ the Virtual Times C1\2022 (Open)\debug.png" />
@@ -182,7 +282,13 @@
     <Image Include="Resources\vignette.png" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MeowEngine.rc" />
+    <ResourceCompile Include="MEOWENGINE.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\..\..\..\DiscordRPC\out\build\x64-Debug\src\discord-rpc.lib" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -190,7 +296,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Osiris</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>MeowEngine</ProjectName>
+    <ProjectName>MEOWENGINE</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -209,6 +315,12 @@
     <CharacterSet>Unicode</CharacterSet>
     <SpectreMitigation>false</SpectreMitigation>
   </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -226,12 +338,16 @@
     <GenerateManifest>false</GenerateManifest>
     <IntDir>$(SolutionDir)$(Configuration)\$(MSBuildProjectName)\obj\</IntDir>
     <OutDir>$(SolutionDir)$(Configuration)\$(MSBuildProjectName)\</OutDir>
+    <IncludePath>D:\Downloads\DiscordRichPresence--master\DiscordRichPresence--master\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
     <IntDir>$(SolutionDir)$(Configuration)\$(MSBuildProjectName)\obj\</IntDir>
     <OutDir>$(SolutionDir)$(Configuration)\$(MSBuildProjectName)\</OutDir>
+    <IncludePath>"D:\Downloads\VAC-Bypass.dll";$(IncludePath)</IncludePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <LibraryPath>"D:\Downloads\DiscordRPC\out\build\x64-Debug\src\discord-rpc.lib";D:\Downloads\discord-rpc-win (1)\discord-rpc\win64-static\lib\discord-rpc.lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -269,7 +385,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>shell32.lib;ole32.lib</AdditionalDependencies>
+      <AdditionalDependencies>shell32.lib;ole32.lib;Winmm.lib</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <EntryPointSymbol>DllEntryPoint</EntryPointSymbol>
       <AdditionalLibraryDirectories>
@@ -312,7 +428,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>shell32.lib;ole32.lib</AdditionalDependencies>
+      <AdditionalDependencies>shell32.lib;ole32.lib;Winmm.lib</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <EntryPointSymbol>DllEntryPoint</EntryPointSymbol>
       <AdditionalLibraryDirectories>

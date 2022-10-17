@@ -17,7 +17,7 @@ void EnginePrediction::run(UserCmd* cmd) noexcept
 {
     if (!localPlayer)
         return;
-    
+
     localPlayerFlags = localPlayer->flags();
 
     *memory->predictionRandomSeed = 0;
