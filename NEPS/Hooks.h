@@ -9,7 +9,7 @@
 #include "Hooks/VmtHook.h"
 #include "Hooks/VmtSwap.h"
 
-#include "FootprintCleaner.hpp"
+#include "FootprintCleaner.h"
 
 struct SoundInfo;
 struct Vector;
