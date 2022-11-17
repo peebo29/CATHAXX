@@ -188,9 +188,6 @@
     <ClCompile Include="SDK\CRC.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
-    <ClCompile Include="Discord.cpp">
-      <Filter>Hooks</Filter>
-    </ClCompile>
     <ClCompile Include="Debug.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -775,15 +772,6 @@
     <ClInclude Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\rapidjson\writer.h">
       <Filter>Hooks</Filter>
     </ClInclude>
-    <ClInclude Include="Discord.hpp">
-      <Filter>Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\discord-rpc-win (2)\discord-rpc\win64-static\include\discord_register.h">
-      <Filter>Hooks\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\discord-rpc-win (2)\discord-rpc\win64-static\include\discord_rpc.h">
-      <Filter>Hooks\Include</Filter>
-    </ClInclude>
     <ClInclude Include="includes.hpp">
       <Filter>Hooks\Include</Filter>
     </ClInclude>
@@ -821,10 +809,5 @@
     <Text Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\CMakeLists.txt">
       <Filter>Hooks</Filter>
     </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\..\..\..\..\DiscordRPC\out\build\x64-Debug\src\discord-rpc.lib">
-      <Filter>Hooks\lib</Filter>
-    </Library>
   </ItemGroup>
 </Project>

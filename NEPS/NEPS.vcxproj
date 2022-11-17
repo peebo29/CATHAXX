@@ -31,7 +31,6 @@
     <ClCompile Include="..\shared_lib\Texture\TextureDX9.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Debug.cpp" />
-    <ClCompile Include="Discord.cpp" />
     <ClCompile Include="EventListener.cpp" />
     <ClCompile Include="FootprintCleaner.cpp" />
     <ClCompile Include="GameData.cpp" />
@@ -80,8 +79,6 @@
     <ClInclude Include="..\..\..\..\..\..\C---Discord-RPC-master\C---Discord-RPC-master\TutDiscord\Discord SDK\src\msg_queue.h" />
     <ClInclude Include="..\..\..\..\..\..\C---Discord-RPC-master\C---Discord-RPC-master\TutDiscord\Discord SDK\src\rpc_connection.h" />
     <ClInclude Include="..\..\..\..\..\..\C---Discord-RPC-master\C---Discord-RPC-master\TutDiscord\Discord SDK\src\serialization.h" />
-    <ClInclude Include="..\..\..\..\..\..\discord-rpc-win (2)\discord-rpc\win64-static\include\discord_register.h" />
-    <ClInclude Include="..\..\..\..\..\..\discord-rpc-win (2)\discord-rpc\win64-static\include\discord_rpc.h" />
     <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\backoff.h" />
     <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\connection.h" />
     <ClInclude Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\msg_queue.h" />
@@ -174,7 +171,6 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigStructs.h" />
     <ClInclude Include="Debug.h" />
-    <ClInclude Include="Discord.hpp" />
     <ClInclude Include="EventListener.h" />
     <ClInclude Include="FootprintCleaner.h" />
     <ClInclude Include="GameData.h" />
@@ -287,9 +283,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\..\..\PlagueRageLoader-main\PlagueRageLoader-main\InverserRageCheatLoader\DiscordSDK\src\CMakeLists.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\..\..\..\..\DiscordRPC\out\build\x64-Debug\src\discord-rpc.lib" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
