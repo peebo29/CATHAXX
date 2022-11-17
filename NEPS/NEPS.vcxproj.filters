@@ -203,6 +203,9 @@
     <ClCompile Include="Players.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+    <ClCompile Include="FootprintCleaner.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -795,6 +798,9 @@
     </ClInclude>
     <ClInclude Include="Players.h">
       <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="FootprintCleaner.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
