@@ -9,21 +9,7 @@
 #include "Hooks/VmtHook.h"
 #include "Hooks/VmtSwap.h"
 
-struct SoundInfo;
-struct Vector;
-
-// Easily switch hooking method for all hooks, choose between MinHook/VmtHook/VmtSwap
-using HookType = MinHook;
-
-//HMODULE           WINAPI     Hooks_LoadLibraryExW(LPCWSTR, HANDLE, DWORD);
-//HMODULE           WINAPI     Hooks_LoadLibraryExW_SteamClient(LPCWSTR, HANDLE, DWORD);
-//FARPROC           WINAPI     Hooks_GetProcAddress(HMODULE, LPCSTR);
-//VOID              WINAPI     Hooks_GetSystemInfo(LPSYSTEM_INFO);
-//BOOL              WINAPI     Hooks_GetVersionExA(LPOSVERSIONINFOEXA);
-//UINT              WINAPI     Hooks_GetSystemDirectoryW(LPWSTR, UINT);
-//UINT              WINAPI     Hooks_GetWindowsDirectoryW(LPWSTR, UINT);
-//DWORD             WINAPI     Hooks_GetCurrentProcessId(VOID);
-//DWORD             WINAPI     Hooks_GetCurrentThreadId(VOID);
+#include "FootprintCleaner.hpp"
 
 struct SoundInfo;
 struct Vector;
@@ -65,4 +51,5 @@ private:
 	HWND window;
 };
 
+inline std::unique_ptr<FootprintCleaner> footprintCleaner;
 inline std::unique_ptr<Hooks> hooks;

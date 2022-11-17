@@ -188,9 +188,6 @@
     <ClCompile Include="SDK\CRC.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\Just-a-Discord-RPC-Example-master\Just-a-Discord-RPC-Example-master\Just a Discord RPC Example\DiscordSDK\src\dllmain.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Discord.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
