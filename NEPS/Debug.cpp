@@ -6,6 +6,7 @@
 
 #include "NEPS/Players.h"
 #include "lib/ImguiCustom.hpp"
+#include "Hooks.h"
 #include "GameData.h"
 #include "Hacks/Animations.h"
 
