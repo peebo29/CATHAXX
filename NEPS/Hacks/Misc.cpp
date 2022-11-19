@@ -1704,7 +1704,7 @@ void Misc::watermark() noexcept
 		if (ImGui::MenuItem("Bottom left", nullptr, selected)) pos = 3;
 		ImGui::EndPopup();
 	}
-	ImGui::Text("V3.18 - Codename: Viola");
+	ImGui::Text("V3.19 - Codename: Viola");
 	ImGui::Separator();
 	constexpr std::array otherOnes = { "M", "ME", "MEO", "MEOW", "MEOWE", "MEOWEN", "MEOWENG", "MEOWENGI", "MEOWENGIN", "MEOWENGINE", "|MEOWENGINE", "M|EOWENGINE", "ME|OWENGINE", "MEO|WENGINE", "MEOW|ENGINE", "MEOWE|NGINE", "MEOWEN|GINE", "MEOWENG|INE", "MEOWENGI|NE", "MEOWENGI|E", "MEOWENGINE|", "MEOWENGINE", "MEOWENGINE.", "MEOWENGINE", "MEOWENGIN", "MEOWENGI", "MEOWENG", "MEOWEN", "MEOWE", "MEOW", "MEO", "ME", "M", ""};
 

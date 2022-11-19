@@ -53,7 +53,7 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPSTR cmdLine
 						if (!dllModuleHandle)
 							MessageBoxA(0, "Failed to load MEOWENGINE.\nDllMain returned false or load library failed.", "MEOWENGINE", MB_OK | MB_ICONERROR);
 						else
-							MessageBoxA(0, "INJECTED -- WELCOME TO V3.18", "MEOWENGINE", MB_OK | MB_ICONINFORMATION);
+							MessageBoxA(0, "INJECTED -- WELCOME TO V3.19", "MEOWENGINE", MB_OK | MB_ICONINFORMATION);
 					}
 		
 					FreeResource(resource);

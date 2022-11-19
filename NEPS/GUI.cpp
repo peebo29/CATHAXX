@@ -172,7 +172,7 @@ static void menuBarItem(const char* name, bool& enabled) noexcept
 void GUI::renderGuiStyle2() noexcept
 {
 	ImGui::Begin("MEOWENGINE");
-	ImGui::Text("V3.18");
+	ImGui::Text("V3.19");
 	ImGui::Separator();
 	
 	if (ImGui::BeginTabBar("", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_NoTooltip))
