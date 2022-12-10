@@ -1,6 +1,3 @@
-- https://discord.gg/QbMjDKdErd
-hoi
-
 CREDS
 - NEPS
 - OSIRIS
